@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= t.cart.pageTitle %> &mdash; Renome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <div class="cart-page">
+    <div class="container">
+      <h1 class="cart-page__title"><%= t.cart.pageTitle %></h1>
+
+      <!-- Empty state -->
+      <div id="cartEmpty" class="cart-empty" style="display:none">
+        <div class="cart-empty__icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </div>
+        <h2 class="cart-empty__title"><%= t.cart.empty %></h2>
+        <p class="cart-empty__text"><%= t.cart.addItems %></p>
+        <a href="/menu" class="btn btn--primary"><%= t.cart.backToMenu %></a>
+      </div>
+
+      <!-- Filled state -->
+      <div id="cartContent" class="cart-content" style="display:none">
+        <div class="cart-items" id="cartItems"></div>
+
+        <div class="cart-summary">
+          <h3 class="cart-summary__title"><%= t.cart.orderSummary %></h3>
+          <div class="cart-summary__row">
+            <span><%= t.cart.products %> (<span id="cartCount">0</span>)</span>
+            <span id="cartSubtotal">0 MDL</span>
+          </div>
+          <div class="cart-summary__row">
+            <span><%= t.cart.delivery %></span>
+            <span class="cart-summary__free"><%= t.cart.free %></span>
+          </div>
+          <div class="cart-summary__divider"></div>
+          <div class="cart-summary__total">
+            <span><%= t.cart.total %></span>
+            <span id="cartTotal">0 MDL</span>
+          </div>
+          <a href="/checkout" class="btn btn--primary btn--full"><%= t.cart.orderNow %></a>
+          <a href="/menu" class="btn btn--outline btn--full"><%= t.cart.continueShopping %></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <div class="toast" id="toast">
+    <span class="toast__text" id="toastText"></span>
+  </div>
+
+  <script src="/js/cart.js"></script>
+  <script src="/js/cart-page.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= t.menu?.pageTitle || 'Meniu' %> &mdash; Renome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <div class="page-offset">
+    <div class="container">
+      <div class="menu-page">
+        <!-- Sticky sidebar with categories -->
+        <aside class="menu-sidebar" id="menuSidebar">
+          <nav class="menu-sidebar__nav">
+            <% categories.forEach(cat => { %>
+              <a href="#<%= cat.slug %>" class="menu-sidebar__link" data-category="<%= cat.slug %>">
+                <span class="menu-sidebar__link-name"><%= L(cat, 'name', lang) %></span>
+                <span class="menu-sidebar__count"><%= menuByCategory[cat.slug] ? menuByCategory[cat.slug].items.length : 0 %></span>
+              </a>
+            <% }) %>
+          </nav>
+        </aside>
+
+        <!-- Main content area with category sections -->
+        <main class="menu-main">
+          <% categories.forEach(cat => { %>
+            <% if (menuByCategory[cat.slug] && menuByCategory[cat.slug].items.length > 0) { %>
+              <section class="menu-category" id="<%= cat.slug %>">
+                <h2 class="menu-category__title"><%= L(cat, 'name', lang) %></h2>
+                <div class="menu-grid">
+                  <% menuByCategory[cat.slug].items.forEach(item => { %>
+                    <%- include('../partials/menu-card', { item, L, lang, t }) %>
+                  <% }) %>
+                </div>
+              </section>
+            <% } %>
+          <% }) %>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <div class="toast" id="toast">
+    <span class="toast__text" id="toastText"></span>
+  </div>
+
+  <script>window.__t = { addedToCart: '<%= t.toast?.addedToCart || "added" %>' };</script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

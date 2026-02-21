@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= item ? 'Редактирование' : 'Добавление' %> позиции &mdash; Renome Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin-body">
+
+  <header class="admin-topbar">
+    <a href="/admin" class="admin-topbar__logo">RENOME <span>Admin</span></a>
+    <nav class="admin-topbar__nav">
+      <a href="/admin" class="admin-topbar__link">Панель</a>
+      <a href="/admin/menu" class="admin-topbar__link admin-topbar__link--active">Меню</a>
+      <a href="/admin/orders" class="admin-topbar__link">Заказы</a>
+      <a href="/admin/users" class="admin-topbar__link">Пользователи</a>
+    </nav>
+    <a href="/" class="admin-topbar__back">Назад на сайт</a>
+  </header>
+
+  <main class="admin-main">
+    <div class="admin-main__header">
+      <h1 class="admin-main__title"><%= item ? 'Редактирование позиции' : 'Добавление новой позиции' %></h1>
+      <a href="/admin/menu" class="btn btn--outline">Назад</a>
+    </div>
+
+    <div class="admin-form-card">
+      <form method="POST" action="/admin/menu/<%= item ? 'edit/' + item.id : 'add' %>?_csrf=<%= csrfToken %>" enctype="multipart/form-data">
+
+        <!-- Name and Slug -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Название <span class="form-required">*</span></label>
+            <input type="text" name="name" class="form-input" required value="<%= item ? item.name : '' %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Slug</label>
+            <input type="text" name="slug" class="form-input" value="<%= item ? item.slug : '' %>" placeholder="Авто">
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label">Описание</label>
+          <textarea name="description" class="form-textarea"><%= item ? item.description || '' : '' %></textarea>
+        </div>
+
+        <!-- RU Translation block -->
+        <div class="admin-form-section">
+          <h4 class="admin-form-section__title">Перевод RU</h4>
+          <div class="form-group">
+            <label class="form-label">Название (RU)</label>
+            <input type="text" name="name_ru" class="form-input" value="<%= item && item.name_ru ? item.name_ru : '' %>" placeholder="Название на русском">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Описание (RU)</label>
+            <textarea name="description_ru" class="form-textarea" placeholder="Описание на русском"><%= item && item.description_ru ? item.description_ru : '' %></textarea>
+          </div>
+        </div>
+
+        <!-- Category and Weight -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Категория</label>
+            <select name="category_id" class="form-select">
+              <option value="">&mdash; Без категории &mdash;</option>
+              <% categories.forEach(c => { %>
+                <option value="<%= c.id %>" <%= item && item.category_id === c.id ? 'selected' : '' %>><%= c.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Вес</label>
+            <input type="text" name="weight" class="form-input" value="<%= item ? item.weight || '' : '' %>" placeholder="напр: 450г">
+          </div>
+        </div>
+
+        <!-- Price -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Цена (MDL) <span class="form-required">*</span></label>
+            <input type="number" name="price" class="form-input" required step="0.01" value="<%= item ? item.price : '' %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Старая цена (MDL)</label>
+            <input type="number" name="old_price" class="form-input" step="0.01" value="<%= item && item.old_price ? item.old_price : '' %>">
+          </div>
+        </div>
+
+        <!-- Image -->
+        <div class="form-group">
+          <label class="form-label">Изображение</label>
+          <input type="file" name="image" accept="image/*" class="form-input-file">
+          <% if (item && item.image) { %>
+            <div class="admin-form-preview">
+              <img src="<%= item.image %>" alt="">
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Flags -->
+        <div class="admin-form-flags">
+          <label class="admin-checkbox">
+            <input type="checkbox" name="is_popular" value="1" <%= item && item.is_popular ? 'checked' : '' %>>
+            <span>Популярное</span>
+          </label>
+          <label class="admin-checkbox">
+            <input type="checkbox" name="is_new" value="1" <%= item && item.is_new ? 'checked' : '' %>>
+            <span>Новинка</span>
+          </label>
+          <% if (item) { %>
+            <label class="admin-checkbox">
+              <input type="checkbox" name="is_available" value="1" <%= item.is_available ? 'checked' : '' %>>
+              <span>Доступно</span>
+            </label>
+          <% } %>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--lg"><%= item ? 'Сохранить изменения' : 'Создать позицию' %></button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

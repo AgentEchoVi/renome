@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Панель управления &mdash; Renome Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin-body">
+
+  <!-- Top admin bar (NOT sidebar like Drive Pub) -->
+  <header class="admin-topbar">
+    <a href="/admin" class="admin-topbar__logo">RENOME <span>Admin</span></a>
+    <nav class="admin-topbar__nav">
+      <a href="/admin" class="admin-topbar__link admin-topbar__link--active">Панель</a>
+      <a href="/admin/menu" class="admin-topbar__link">Меню</a>
+      <a href="/admin/orders" class="admin-topbar__link">Заказы</a>
+      <a href="/admin/users" class="admin-topbar__link">Пользователи</a>
+    </nav>
+    <a href="/" class="admin-topbar__back">Назад на сайт</a>
+  </header>
+
+  <main class="admin-main">
+    <div class="admin-main__header">
+      <h1 class="admin-main__title">Панель управления</h1>
+    </div>
+
+    <!-- Stats row -->
+    <div class="admin-stats">
+      <div class="admin-stat-card">
+        <span class="admin-stat-card__label">Позиций в меню</span>
+        <span class="admin-stat-card__value"><%= stats.itemCount %></span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="admin-stat-card__label">Всего заказов</span>
+        <span class="admin-stat-card__value"><%= stats.orderCount %></span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="admin-stat-card__label">Заказов сегодня</span>
+        <span class="admin-stat-card__value admin-stat-card__value--accent"><%= stats.todayOrders %></span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="admin-stat-card__label">Общая выручка</span>
+        <span class="admin-stat-card__value admin-stat-card__value--green"><%= stats.revenue %> MDL</span>
+      </div>
+    </div>
+
+    <!-- Recent orders -->
+    <h2 class="admin-section-title">Последние заказы</h2>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Клиент</th>
+            <th>Телефон</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+            <th>Дата</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentOrders.forEach(o => { %>
+            <tr>
+              <td><a href="/admin/orders/<%= o.id %>" class="admin-link">#<%= o.id %></a></td>
+              <td><%= o.customer_name %></td>
+              <td><%= o.customer_phone %></td>
+              <td class="admin-table__price"><%= o.total %> MDL</td>
+              <td><span class="badge badge--<%= o.status %>"><%= o.status %></span></td>
+              <td class="admin-table__date"><%= new Date(o.created_at).toLocaleDateString('ru-RU') %></td>
+            </tr>
+          <% }) %>
+          <% if (recentOrders.length === 0) { %>
+            <tr><td colspan="6" class="admin-table__empty">Заказов пока нет</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

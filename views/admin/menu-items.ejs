@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Меню &mdash; Renome Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin-body">
+
+  <header class="admin-topbar">
+    <a href="/admin" class="admin-topbar__logo">RENOME <span>Admin</span></a>
+    <nav class="admin-topbar__nav">
+      <a href="/admin" class="admin-topbar__link">Панель</a>
+      <a href="/admin/menu" class="admin-topbar__link admin-topbar__link--active">Меню</a>
+      <a href="/admin/orders" class="admin-topbar__link">Заказы</a>
+      <a href="/admin/users" class="admin-topbar__link">Пользователи</a>
+    </nav>
+    <a href="/" class="admin-topbar__back">Назад на сайт</a>
+  </header>
+
+  <main class="admin-main">
+    <div class="admin-main__header">
+      <h1 class="admin-main__title">Меню (<%= items.length %> позиций)</h1>
+      <a href="/admin/menu/add" class="btn btn--primary">+ Добавить позицию</a>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Фото</th>
+            <th>Название</th>
+            <th>Категория</th>
+            <th>Цена</th>
+            <th>Метки</th>
+            <th>Статус</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(item => { %>
+            <tr>
+              <td>
+                <% if (item.image) { %>
+                  <img src="<%= item.image %>" class="admin-table__thumb" alt="">
+                <% } else { %>
+                  <div class="admin-table__thumb-empty">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  </div>
+                <% } %>
+              </td>
+              <td class="admin-table__name"><%= item.name %></td>
+              <td class="admin-table__secondary"><%= item.category_name || '---' %></td>
+              <td class="admin-table__price"><%= item.price %> MDL</td>
+              <td>
+                <% if (item.is_popular) { %><span class="admin-tag admin-tag--star">Popular</span><% } %>
+                <% if (item.is_new) { %><span class="admin-tag admin-tag--new">New</span><% } %>
+              </td>
+              <td>
+                <span class="badge badge--<%= item.is_available ? 'completed' : 'cancelled' %>"><%= item.is_available ? 'Активно' : 'Неактивно' %></span>
+              </td>
+              <td>
+                <div class="admin-table__actions">
+                  <a href="/admin/menu/edit/<%= item.id %>" class="btn btn--sm btn--outline">Изменить</a>
+                  <form method="POST" action="/admin/menu/delete/<%= item.id %>?_csrf=<%= csrfToken %>" onsubmit="return confirm('Удалить эту позицию?')">
+                    <button type="submit" class="btn btn--sm btn--danger">Удалить</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

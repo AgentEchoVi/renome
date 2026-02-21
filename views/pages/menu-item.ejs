@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="<%= L(item, 'name', lang) %> &mdash; <%= L(item, 'description', lang) || 'Renome' %>">
+  <title><%= L(item, 'name', lang) %> &mdash; Renome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="product-detail">
+    <div class="container">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a href="/"><%= t.nav.home %></a>
+        <span class="breadcrumb__sep">/</span>
+        <a href="/menu"><%= t.nav.menu %></a>
+        <span class="breadcrumb__sep">/</span>
+        <a href="/menu#<%= item.category_slug %>"><%= lang === 'ru' && item.category_name_ru ? item.category_name_ru : item.category_name %></a>
+        <span class="breadcrumb__sep">/</span>
+        <span class="breadcrumb__current"><%= L(item, 'name', lang) %></span>
+      </nav>
+
+      <div class="product-detail__grid">
+        <!-- Product image -->
+        <div class="product-detail__media">
+          <% if (item.is_new) { %>
+            <span class="menu-card__badge menu-card__badge--new"><%= t.badges?.new || 'Nou' %></span>
+          <% } else if (item.is_popular) { %>
+            <span class="menu-card__badge menu-card__badge--popular"><%= t.badges?.popular || 'Popular' %></span>
+          <% } %>
+          <% if (item.image) { %>
+            <img src="<%= item.image %>" alt="<%= L(item, 'name', lang) %>" class="product-detail__img">
+          <% } else { %>
+            <div class="product-detail__no-img">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Product info -->
+        <div class="product-detail__info">
+          <div class="product-detail__category">
+            <a href="/menu#<%= item.category_slug %>"><%= lang === 'ru' && item.category_name_ru ? item.category_name_ru : item.category_name %></a>
+          </div>
+
+          <h1 class="product-detail__name"><%= L(item, 'name', lang) %></h1>
+
+          <% if (item.description) { %>
+            <p class="product-detail__desc"><%= L(item, 'description', lang) %></p>
+          <% } %>
+
+          <% if (item.weight) { %>
+            <div class="product-detail__weight">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/></svg>
+              <span><%= item.weight %></span>
+            </div>
+          <% } %>
+
+          <div class="product-detail__price-row">
+            <span class="product-detail__price"><%= item.price %> <small>MDL</small></span>
+            <% if (item.old_price) { %>
+              <span class="product-detail__old-price"><%= item.old_price %> MDL</span>
+            <% } %>
+          </div>
+
+          <% if (item.is_available) { %>
+            <div class="product-detail__actions">
+              <div class="product-detail__qty">
+                <button class="product-detail__qty-btn" id="qtyMinus" type="button">&minus;</button>
+                <span class="product-detail__qty-val" id="qtyValue">1</span>
+                <button class="product-detail__qty-btn" id="qtyPlus" type="button">+</button>
+              </div>
+              <button class="btn btn--primary btn--lg product-detail__add" id="addToCartBtn"
+                data-id="<%= item.id %>"
+                data-name="<%= L(item, 'name', lang) %>"
+                data-price="<%= item.price %>"
+                data-image="<%= item.image || '' %>"
+                data-weight="<%= item.weight || '' %>">
+                <%= t.product?.addToCart || 'Adauga in cos' %>
+              </button>
+            </div>
+          <% } else { %>
+            <div class="product-detail__unavailable"><%= t.product?.unavailable || 'Indisponibil' %></div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Related items -->
+      <% if (related && related.length > 0) { %>
+        <section class="product-detail__related">
+          <h2 class="product-detail__related-title"><%= t.product?.related || 'Recomandate' %></h2>
+          <div class="menu-grid">
+            <% related.forEach(function(r) { %>
+              <%- include('../partials/menu-card', { item: r, L, lang, t }) %>
+            <% }); %>
+          </div>
+        </section>
+      <% } %>
+
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+
+  <div class="toast" id="toast">
+    <span class="toast__text" id="toastText"></span>
+  </div>
+
+  <script>window.__t = { addedToCart: '<%= t.toast?.addedToCart || "added" %>' };</script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    (function() {
+      var qtyVal = document.getElementById('qtyValue');
+      var minusBtn = document.getElementById('qtyMinus');
+      var plusBtn = document.getElementById('qtyPlus');
+      var addBtn = document.getElementById('addToCartBtn');
+      if (!qtyVal || !addBtn) return;
+
+      var qty = 1;
+
+      minusBtn.addEventListener('click', function() {
+        if (qty > 1) { qty--; qtyVal.textContent = qty; }
+      });
+      plusBtn.addEventListener('click', function() {
+        if (qty < 99) { qty++; qtyVal.textContent = qty; }
+      });
+      addBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var id = parseInt(addBtn.dataset.id);
+        var name = addBtn.dataset.name;
+        var price = addBtn.dataset.price;
+        var image = addBtn.dataset.image;
+        var weight = addBtn.dataset.weight;
+        for (var i = 0; i < qty; i++) {
+          Cart.addItem(id, name, price, image, weight);
+        }
+        showToast(name + ' x' + qty + ' ' + (window.__t ? window.__t.addedToCart : 'added!'));
+        addBtn.style.transform = 'scale(1.05)';
+        setTimeout(function() { addBtn.style.transform = ''; }, 200);
+      });
+    })();
+  </script>
+</body>
+</html>

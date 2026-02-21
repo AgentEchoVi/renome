@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= t.account.pageTitle %> &mdash; Renome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <div class="account-page">
+    <div class="container">
+
+      <!-- Account header -->
+      <div class="account-header">
+        <div class="account-header__left">
+          <div class="account-avatar"><%= user.name.charAt(0) %></div>
+          <div>
+            <h1 class="account-header__name"><%= user.name %></h1>
+            <p class="account-header__email"><%= user.email %></p>
+          </div>
+        </div>
+        <div class="account-header__actions">
+          <% if (user.role === 'admin') { %>
+            <a href="/admin" class="btn btn--outline btn--sm"><%= t.account.adminPanel %></a>
+          <% } %>
+          <a href="/auth/logout" class="btn btn--outline btn--sm"><%= t.account.logout %></a>
+        </div>
+      </div>
+
+      <!-- Profile card -->
+      <div class="account-card">
+        <h3 class="account-card__title"><%= t.account.profile %></h3>
+        <div class="account-card__grid">
+          <div class="account-card__field">
+            <span class="account-card__label"><%= t.account.name %></span>
+            <p class="account-card__value"><%= user.name %></p>
+          </div>
+          <div class="account-card__field">
+            <span class="account-card__label"><%= t.account.email %></span>
+            <p class="account-card__value"><%= user.email %></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders section -->
+      <h2 class="account-section-title"><%= t.account.orders %></h2>
+
+      <% if (!orders || orders.length === 0) { %>
+        <div class="account-empty">
+          <p class="account-empty__text"><%= t.account.noOrders %></p>
+          <a href="/menu" class="btn btn--primary"><%= t.account.orderNow %></a>
+        </div>
+      <% } else { %>
+        <div class="account-orders">
+          <table class="account-table">
+            <thead>
+              <tr>
+                <th><%= t.account.orderId %></th>
+                <th><%= t.account.date %></th>
+                <th><%= t.account.total %></th>
+                <th><%= t.account.status %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach(order => { %>
+                <tr>
+                  <td class="account-table__id">#<%= order.id %></td>
+                  <td><%= new Date(order.created_at).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'ro-MD') %></td>
+                  <td class="account-table__total"><%= order.total %> MDL</td>
+                  <td><span class="badge badge--<%= order.status %>"><%= order.status %></span></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <div class="toast" id="toast">
+    <span class="toast__text" id="toastText"></span>
+  </div>
+
+  <script src="/js/cart.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

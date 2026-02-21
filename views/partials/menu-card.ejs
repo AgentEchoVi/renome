@@ -1,0 +1,41 @@
+<a href="/menu/<%= item.slug %>" class="menu-card">
+  <div class="menu-card__visual">
+    <% if (item.is_new) { %>
+      <span class="menu-card__badge menu-card__badge--new"><%= t.badges?.new || 'Nou' %></span>
+    <% } else if (item.is_popular) { %>
+      <span class="menu-card__badge menu-card__badge--popular"><%= t.badges?.popular || 'Popular' %></span>
+    <% } %>
+    <div class="menu-card__img-wrap">
+      <% if (item.image) { %>
+        <img src="<%= item.image %>" alt="<%= L(item, 'name', lang) %>" loading="lazy">
+      <% } else { %>
+        <div class="menu-card__placeholder">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+      <% } %>
+      <div class="menu-card__overlay">
+        <span class="menu-card__overlay-text"><%= t.product?.view || 'Vezi' %></span>
+      </div>
+    </div>
+  </div>
+  <div class="menu-card__content">
+    <h3 class="menu-card__name"><%= L(item, 'name', lang) %></h3>
+    <div class="menu-card__ornament"><span></span><span></span><span></span></div>
+    <% if (item.description) { %>
+      <p class="menu-card__desc"><%= L(item, 'description', lang) %></p>
+    <% } %>
+    <% if (item.weight) { %>
+      <span class="menu-card__weight"><%= item.weight %></span>
+    <% } %>
+    <div class="menu-card__price-row">
+      <span class="menu-card__price"><%= item.price %> <small>MDL</small></span>
+      <% if (item.old_price) { %>
+        <span class="menu-card__price-old"><%= item.old_price %> MDL</span>
+      <% } %>
+    </div>
+    <button class="menu-card__cart-btn" data-id="<%= item.id %>" data-name="<%= L(item, 'name', lang) %>" data-price="<%= item.price %>" data-image="<%= item.image || '' %>" data-weight="<%= item.weight || '' %>" <% if (!item.is_available) { %>disabled<% } %>>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span><%= t.product?.addToCart || 'Adaugă' %></span>
+    </button>
+  </div>
+</a>

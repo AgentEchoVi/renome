@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заказ #<%= order.id %> &mdash; Renome Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin-body">
+
+  <header class="admin-topbar">
+    <a href="/admin" class="admin-topbar__logo">RENOME <span>Admin</span></a>
+    <nav class="admin-topbar__nav">
+      <a href="/admin" class="admin-topbar__link">Панель</a>
+      <a href="/admin/menu" class="admin-topbar__link">Меню</a>
+      <a href="/admin/orders" class="admin-topbar__link admin-topbar__link--active">Заказы</a>
+      <a href="/admin/users" class="admin-topbar__link">Пользователи</a>
+    </nav>
+    <a href="/" class="admin-topbar__back">Назад на сайт</a>
+  </header>
+
+  <main class="admin-main">
+    <div class="admin-main__header">
+      <h1 class="admin-main__title">Заказ #<%= order.id %></h1>
+      <a href="/admin/orders" class="btn btn--outline">Назад к заказам</a>
+    </div>
+
+    <!-- Two-column info -->
+    <div class="admin-detail-grid">
+      <!-- Customer info -->
+      <div class="admin-detail-card">
+        <h3 class="admin-detail-card__title">Информация о клиенте</h3>
+        <dl class="admin-detail-list">
+          <div class="admin-detail-list__row">
+            <dt>Имя</dt>
+            <dd><%= order.customer_name %></dd>
+          </div>
+          <div class="admin-detail-list__row">
+            <dt>Телефон</dt>
+            <dd><%= order.customer_phone %></dd>
+          </div>
+          <% if (order.customer_email) { %>
+            <div class="admin-detail-list__row">
+              <dt>Email</dt>
+              <dd><%= order.customer_email %></dd>
+            </div>
+          <% } %>
+          <div class="admin-detail-list__row">
+            <dt>Тип</dt>
+            <dd><%= order.delivery_type === 'delivery' ? 'Доставка' : 'Самовывоз' %></dd>
+          </div>
+          <% if (order.delivery_address) { %>
+            <div class="admin-detail-list__row">
+              <dt>Адрес</dt>
+              <dd><%= order.delivery_address %></dd>
+            </div>
+          <% } %>
+          <% if (order.comment) { %>
+            <div class="admin-detail-list__row">
+              <dt>Комментарий</dt>
+              <dd><%= order.comment %></dd>
+            </div>
+          <% } %>
+          <div class="admin-detail-list__row">
+            <dt>Оплата</dt>
+            <dd><%= order.payment_method === 'cash' ? 'Наличные' : 'Карта' %></dd>
+          </div>
+          <div class="admin-detail-list__row">
+            <dt>Дата</dt>
+            <dd><%= new Date(order.created_at).toLocaleString('ru-RU') %></dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Status update -->
+      <div class="admin-detail-card">
+        <h3 class="admin-detail-card__title">Статус заказа</h3>
+        <p class="admin-detail-status">
+          Текущий: <span class="badge badge--<%= order.status %>"><%= order.status %></span>
+        </p>
+        <form method="POST" action="/admin/orders/<%= order.id %>/status?_csrf=<%= csrfToken %>" class="admin-status-form">
+          <div class="form-group">
+            <select name="status" class="form-select">
+              <option value="new" <%= order.status === 'new' ? 'selected' : '' %>>Новый</option>
+              <option value="confirmed" <%= order.status === 'confirmed' ? 'selected' : '' %>>Подтверждён</option>
+              <option value="cooking" <%= order.status === 'cooking' ? 'selected' : '' %>>Готовится</option>
+              <option value="delivery" <%= order.status === 'delivery' ? 'selected' : '' %>>В доставке</option>
+              <option value="completed" <%= order.status === 'completed' ? 'selected' : '' %>>Завершён</option>
+              <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Отменён</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn--primary">Обновить статус</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Order items table -->
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Блюдо</th>
+            <th>Цена</th>
+            <th>Количество</th>
+            <th>Подитог</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(item => { %>
+            <tr>
+              <td class="admin-table__name"><%= item.name %></td>
+              <td><%= item.price %> MDL</td>
+              <td>x<%= item.quantity %></td>
+              <td class="admin-table__price"><%= (item.price * item.quantity).toFixed(0) %> MDL</td>
+            </tr>
+          <% }) %>
+        </tbody>
+        <tfoot>
+          <tr class="admin-table__total-row">
+            <td colspan="3" class="admin-table__total-label">ИТОГО:</td>
+            <td class="admin-table__total-value"><%= order.total %> MDL</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

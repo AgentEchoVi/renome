@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Пользователи &mdash; Renome Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin-body">
+
+  <header class="admin-topbar">
+    <a href="/admin" class="admin-topbar__logo">RENOME <span>Admin</span></a>
+    <nav class="admin-topbar__nav">
+      <a href="/admin" class="admin-topbar__link">Панель</a>
+      <a href="/admin/menu" class="admin-topbar__link">Меню</a>
+      <a href="/admin/orders" class="admin-topbar__link">Заказы</a>
+      <a href="/admin/users" class="admin-topbar__link admin-topbar__link--active">Пользователи</a>
+    </nav>
+    <a href="/" class="admin-topbar__back">Назад на сайт</a>
+  </header>
+
+  <main class="admin-main">
+    <div class="admin-main__header">
+      <h1 class="admin-main__title">Пользователи (<%= users.length %>)</h1>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Телефон</th>
+            <th>Дата регистрации</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(u => { %>
+            <tr>
+              <td class="admin-table__name"><%= u.id %></td>
+              <td><%= u.name %></td>
+              <td class="admin-table__email"><%= u.email %></td>
+              <td><%= u.phone || '---' %></td>
+              <td class="admin-table__date"><%= new Date(u.created_at).toLocaleString('ru-RU') %></td>
+            </tr>
+          <% }) %>
+          <% if (users.length === 0) { %>
+            <tr><td colspan="5" class="admin-table__empty">Пользователей пока нет</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

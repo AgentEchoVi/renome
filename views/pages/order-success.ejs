@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= t.orderSuccess.pageTitle %> &mdash; Renome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <section class="success-page">
+    <div class="container">
+      <div class="success-card">
+        <div class="success-card__icon">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h1 class="success-card__title"><%= t.orderSuccess.heading %></h1>
+        <p class="success-card__order-id">#<%= order.id %></p>
+        <p class="success-card__text"><%= t.orderSuccess.thanks %>, <strong><%= order.customer_name %></strong>!</p>
+        <p class="success-card__text"><%= t.orderSuccess.processing %></p>
+
+        <div class="success-card__details">
+          <div class="success-card__row">
+            <span><%= t.orderSuccess.total %></span>
+            <strong><%= order.total %> MDL</strong>
+          </div>
+          <div class="success-card__row">
+            <span><%= t.orderSuccess.payment %></span>
+            <strong><%= order.payment_method === 'cash' ? t.orderSuccess.cashPayment : order.payment_method === 'online' ? (t.orderSuccess.onlinePayment || 'Online') : t.orderSuccess.cardPayment %></strong>
+          </div>
+          <% if (order.delivery_type === 'delivery') { %>
+            <div class="success-card__row">
+              <span><%= t.orderSuccess.deliveryTo %></span>
+              <strong><%= order.delivery_address %></strong>
+            </div>
+          <% } else { %>
+            <div class="success-card__row">
+              <span><%= t.orderSuccess.pickup %></span>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="success-card__actions">
+          <a href="/menu" class="btn btn--primary"><%= t.orderSuccess.backToMenu %></a>
+          <a href="/" class="btn btn--outline"><%= t.orderSuccess.home %></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('../partials/footer') %>
+
+  <div class="toast" id="toast">
+    <span class="toast__text" id="toastText"></span>
+  </div>
+
+  <script src="/js/cart.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

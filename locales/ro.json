@@ -1,0 +1,201 @@
+{
+  "nav": {
+    "home": "Acasă",
+    "menu": "Meniu",
+    "about": "Despre noi",
+    "contacts": "Contacte",
+    "cart": "Coș de cumpărături",
+    "myAccount": "Cabinetul meu",
+    "login": "Autentificare"
+  },
+  "hero": {
+    "badge": "Cafenea Italiană în Bălți",
+    "title": "Bucătăria italiană <span>autentică</span>",
+    "subtitle": "Pizza artizanală, paste proaspete, risotto și deserturi italiene. Comandă online sau vino să te bucuri de atmosfera Renome.",
+    "viewMenu": "Vezi Meniul",
+    "callUs": "Sună-ne"
+  },
+  "popular": {
+    "tag": "Cele mai comandate",
+    "title": "Populare",
+    "desc": "Preparatele preferate ale clienților noștri",
+    "viewAll": "Vezi meniul complet"
+  },
+  "categories": {
+    "tag": "Ce servim",
+    "title": "Categorii"
+  },
+  "instagram": {
+    "tag": "Urmărește-ne pe Instagram",
+    "title": "Din viața Renome",
+    "subtitle": "Atmosferă, preparate proaspete și momente din bucătăria noastră",
+    "follow": "Urmărește @renome.balti",
+    "viewPost": "Vezi publicația"
+  },
+  "aboutSection": {
+    "tag": "Despre noi",
+    "title": "Renome",
+    "subtitle": "Cafenea pe motiv italian",
+    "desc": "Renome — locul unde tradițiile italiene se întâlnesc cu confortul. Preparăm pizza în cuptor autentic pe lemne, folosim ingrediente proaspete și punem suflet în fiecare preparat. Dimineața — cafea aromată, la prânz — mâncare consistentă, seara — relaxare cu narghilea și un pahar de vin.",
+    "card1title": "Pizza din cuptor pe lemne",
+    "card1desc": "Aluat făcut manual, sos de roșii italiene și căldura lemnelor adevărate — așa se naște pizza noastră",
+    "card2title": "Bucătărie și băuturi",
+    "card2desc": "Paste, risotto, antipasti, deserturi — meniu italian complet. Cocktailuri de autor, vin și cafea aromată",
+    "card3title": "Atmosferă și relaxare",
+    "card3desc": "Interior confortabil, narghilea premium și muzică live în weekend. Locul ideal pentru întâlniri cu prietenii și cine în familie"
+  },
+  "contact": {
+    "tag": "Contactează-ne",
+    "title": "Vino la Renome",
+    "address": "Adresă",
+    "addressVal": "str. Calea Ieșilor 57, Bălți",
+    "phone": "Telefon / Rezervare",
+    "phoneVal": "+373 78 666 613",
+    "schedule": "Program",
+    "scheduleWeek": "Luni - Duminică: 10:00 - 01:00",
+    "scheduleWeekend": "Zilnic, fără zile libere",
+    "social": "Social"
+  },
+  "menu": {
+    "pageTitle": "Meniu",
+    "tag": "Renome",
+    "subtitle": "Alege din preparatele noastre italiene preferate",
+    "all": "Toate"
+  },
+  "product": {
+    "addToCart": "În coș",
+    "unavailable": "Indisponibil momentan",
+    "related": "Din aceeași categorie",
+    "view": "Vezi"
+  },
+  "badges": {
+    "new": "NOU",
+    "popular": "POPULAR"
+  },
+  "cart": {
+    "pageTitle": "Coș de cumpărături",
+    "empty": "Coșul este gol",
+    "addItems": "Adăugați preparate din meniu",
+    "backToMenu": "Înapoi la meniu",
+    "orderSummary": "Rezumatul comenzii",
+    "products": "Produse",
+    "delivery": "Livrare",
+    "free": "Gratuită",
+    "total": "Total",
+    "orderNow": "Comandă acum",
+    "continueShopping": "Continuă cumpărăturile"
+  },
+  "checkout": {
+    "pageTitle": "Finalizare comandă",
+    "orderType": "Tipul comenzii",
+    "deliveryType": "Livrare",
+    "pickupType": "Ridicare din local",
+    "contactInfo": "Date de contact",
+    "name": "Nume",
+    "phone": "Telefon",
+    "email": "Email",
+    "addressSection": "Adresa de livrare",
+    "addressPlaceholder": "Adresa completă",
+    "paymentMethod": "Metoda de plată",
+    "cash": "Numerar",
+    "card": "Card la livrare",
+    "online": "Plată online",
+    "onlineSoon": "în curând",
+    "comment": "Comentariu",
+    "commentPlaceholder": "Dorințe speciale...",
+    "placeOrder": "Plasează comanda",
+    "placingOrder": "Se plasează comanda...",
+    "yourOrder": "Comanda ta"
+  },
+  "auth": {
+    "loginTitle": "Autentificare",
+    "loginSubtitle": "Bine ai revenit la Renome",
+    "loginError": "Email sau parolă incorectă",
+    "email": "Email",
+    "password": "Parolă",
+    "loginBtn": "Intră în cont",
+    "noAccount": "Nu ai cont?",
+    "register": "Înregistrează-te",
+    "registerTitle": "Înregistrare",
+    "registerSubtitle": "Creează-ți cont la Renome",
+    "registerError": "Completați toate câmpurile. Parola minim 6 caractere.",
+    "emailExists": "Acest email este deja înregistrat",
+    "nameLabel": "Numele",
+    "phoneLabel": "Telefon",
+    "createAccount": "Creează cont",
+    "hasAccount": "Ai deja cont?",
+    "loginLink": "Autentifică-te"
+  },
+  "account": {
+    "pageTitle": "Cabinetul meu",
+    "adminPanel": "Admin Panel",
+    "logout": "Deconectare",
+    "profile": "Profilul meu",
+    "name": "Nume",
+    "email": "Email",
+    "orders": "Comenzile mele",
+    "noOrders": "Nu aveți comenzi încă",
+    "orderNow": "Comandă acum",
+    "orderId": "#",
+    "date": "Data",
+    "total": "Total",
+    "status": "Status"
+  },
+  "orderSuccess": {
+    "pageTitle": "Comandă plasată",
+    "heading": "Comanda a fost plasată!",
+    "thanks": "Mulțumim",
+    "processing": "Vom prelucra comanda ta în cel mai scurt timp.",
+    "total": "Total:",
+    "payment": "Metoda de plată:",
+    "cashPayment": "Numerar",
+    "cardPayment": "Card",
+    "onlinePayment": "Online",
+    "deliveryTo": "Livrare la:",
+    "pickup": "Ridicare din local",
+    "backToMenu": "Înapoi la meniu",
+    "home": "Pagina principală"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Pagina nu a fost găsită",
+    "home": "Pagina principală"
+  },
+  "footer": {
+    "desc": "Cafenea italiană în Bălți, Moldova. Pizza, paste, risotto, antipasti și deserturi autentice italiene.",
+    "menuTitle": "Meniu",
+    "pizza": "Pizza",
+    "burgeri": "Paste",
+    "gratar": "Risotto",
+    "salate": "Salate",
+    "sushi": "Deserturi",
+    "bauturi": "Băuturi",
+    "infoTitle": "Informații",
+    "fullMenu": "Meniu complet",
+    "aboutUs": "Despre noi",
+    "cartLink": "Coș de cumpărături",
+    "loginLink": "Autentificare",
+    "contactTitle": "Contacte",
+    "scheduleWeek": "Lun-Dum: 10:00 - 01:00",
+    "scheduleWeekend": "Zilnic, fără zile libere",
+    "copyright": "Toate drepturile rezervate."
+  },
+  "errors": {
+    "requiredFields": "Completați câmpurile obligatorii",
+    "invalidCart": "Date incorecte ale coșului",
+    "emptyCart": "Coșul este gol",
+    "itemsUnavailable": "Produsele nu sunt disponibile",
+    "csrf": "Eroare de securitate (CSRF). Reîncărcați pagina.",
+    "forbidden": "Acces interzis",
+    "prefix": "Eroare: ",
+    "unknown": "Eroare necunoscută",
+    "network": "Eroare de rețea: "
+  },
+  "toast": {
+    "addedToCart": "adăugat în coș!"
+  },
+  "meta": {
+    "homeTitle": "Renome — Cafenea Italiană | Bălți, Moldova",
+    "homeDesc": "Renome — cafenea italiană în Bălți, Moldova. Pizza, paste, risotto, antipasti și deserturi. Comandă online cu livrare rapidă."
+  }
+}

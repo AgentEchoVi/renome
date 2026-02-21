@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="<%= typeof lang !== 'undefined' ? lang : 'ro' %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 &mdash; Renome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <% if (typeof t !== 'undefined') { %>
+    <%- include('../partials/header') %>
+  <% } %>
+
+  <section class="error-page">
+    <div class="error-page__inner">
+      <div class="error-page__illustration">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="56" stroke="var(--border)" stroke-width="2" stroke-dasharray="6 4"/>
+          <ellipse cx="60" cy="62" rx="36" ry="36" fill="var(--accent-light)"/>
+          <path d="M44 50 C44 38, 50 30, 60 30 C70 30, 76 38, 76 50" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <line x1="60" y1="30" x2="60" y2="18" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="60" y1="18" x2="56" y2="14" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="60" y1="18" x2="64" y2="14" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="60" cy="68" rx="28" ry="4" fill="var(--border)"/>
+          <rect x="57" y="50" width="6" height="32" rx="3" fill="var(--accent)" opacity="0.7"/>
+          <circle cx="48" cy="62" r="3" fill="var(--accent)" opacity="0.4"/>
+          <circle cx="72" cy="58" r="2.5" fill="var(--accent)" opacity="0.4"/>
+          <circle cx="54" cy="72" r="2" fill="var(--accent)" opacity="0.3"/>
+          <circle cx="68" cy="70" r="2.5" fill="var(--accent)" opacity="0.3"/>
+        </svg>
+      </div>
+      <h1 class="error-page__code">404</h1>
+      <p class="error-page__message"><%= typeof t !== 'undefined' ? t.notFound.message : 'Page not found' %></p>
+      <a href="/" class="btn btn--primary"><%= typeof t !== 'undefined' ? t.notFound.home : 'Home' %></a>
+    </div>
+  </section>
+
+  <% if (typeof t !== 'undefined') { %>
+    <%- include('../partials/footer') %>
+  <% } %>
+
+  <div class="toast" id="toast">
+    <span class="toast__text" id="toastText"></span>
+  </div>
+
+  <script src="/js/cart.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
