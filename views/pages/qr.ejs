@@ -74,40 +74,43 @@
       border-radius: 14px;
       padding: 10px;
       display: inline-block;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .qr__code img {
       display: block;
-      width: 160px;
-      height: 160px;
+      width: 150px;
+      height: 150px;
     }
 
-    /* --- CTA --- */
-    .qr__cta {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600;
-      color: #1a1a1a;
-      line-height: 1.2;
-      margin-bottom: 4px;
+    /* --- Steps --- */
+    .qr__steps {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 12px;
     }
 
-    .qr__cta-ro { font-size: 17px; }
-    .qr__cta-ru { font-size: 14px; color: #888; font-weight: 500; }
-
-    /* --- Order hint --- */
-    .qr__hint {
-      font-size: 10px;
-      color: #aaa;
-      line-height: 1.5;
-      margin-bottom: 10px;
+    .qr__step {
+      flex: 1;
+      max-width: 80px;
+      padding: 8px 4px;
+      background: #f8f7f4;
+      border-radius: 10px;
+      font-size: 9px;
+      color: #666;
+      line-height: 1.3;
     }
 
-    .qr__hint span {
-      display: inline-block;
-      margin: 0 2px;
-      color: #ccc;
+    .qr__step-icon {
+      display: block;
+      margin: 0 auto 4px;
+      font-size: 18px;
+      line-height: 1;
     }
+
+    .qr__step-ro { display: block; }
+    .qr__step-ru { display: block; color: #aaa; font-size: 8px; }
 
     /* --- URL --- */
     .qr__url {
@@ -165,16 +168,16 @@
     .qr__print-btn:hover { background: #1e3d1a; }
     .qr__print-btn svg { width: 13px; height: 13px; }
 
-    /* ====== PRINT — одна страница ====== */
+    /* ====== PRINT ====== */
     @media print {
       @page {
-        size: 80mm 110mm;
+        size: 80mm 120mm;
         margin: 0;
       }
 
       html, body {
         width: 80mm;
-        height: 110mm;
+        height: 120mm;
         background: #fff;
         padding: 0;
         margin: 0;
@@ -186,8 +189,8 @@
         box-shadow: none;
         border-radius: 0;
         width: 80mm;
-        height: 110mm;
-        padding: 8mm 6mm 5mm;
+        height: 120mm;
+        padding: 5mm 4mm 4mm;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -198,28 +201,39 @@
 
       .qr::before { display: none; }
       .qr__print { display: none !important; }
-      .qr__url { background: #eee; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .qr__code { border-color: #2d5a27; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-      .qr__logo { width: 28px; height: 28px; margin-bottom: 3px; }
-      .qr__name { font-size: 18px; margin-bottom: 2px; }
-      .qr__type { font-size: 7px; margin-bottom: 8px; }
-      .qr__code { padding: 6px; margin-bottom: 6px; border-radius: 8px; }
-      .qr__code img { width: 32mm; height: 32mm; }
-      .qr__cta { margin-bottom: 2px; }
-      .qr__cta-ro { font-size: 13px; }
-      .qr__cta-ru { font-size: 11px; }
-      .qr__hint { font-size: 8px; margin-bottom: 4px; }
-      .qr__url { font-size: 8px; padding: 3px 10px; margin-bottom: 5px; }
-      .qr__sep { margin-bottom: 4px; }
-      .qr__info { font-size: 7px; }
+      .qr__step,
+      .qr__url {
+        background: #f0f0f0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .qr__code {
+        border-color: #2d5a27;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .qr__logo { width: 24px; height: 24px; margin-bottom: 2px; }
+      .qr__name { font-size: 16px; margin-bottom: 1px; }
+      .qr__type { font-size: 6px; margin-bottom: 6px; }
+      .qr__code { padding: 5px; margin-bottom: 5px; border-radius: 6px; }
+      .qr__code img { width: 28mm; height: 28mm; }
+      .qr__steps { gap: 3px; margin-bottom: 5px; }
+      .qr__step { padding: 4px 2px; border-radius: 5px; font-size: 7px; }
+      .qr__step-icon { font-size: 12px; margin-bottom: 2px; }
+      .qr__step-ru { font-size: 6px; }
+      .qr__url { font-size: 7px; padding: 2px 8px; margin-bottom: 4px; }
+      .qr__sep { margin-bottom: 3px; }
+      .qr__info { font-size: 6px; }
     }
 
     /* ====== Mobile ====== */
     @media (max-width: 340px) {
-      .qr { width: 100%; padding: 20px 18px 16px; }
+      .qr { width: 100%; padding: 20px 16px 16px; }
       .qr__name { font-size: 20px; }
-      .qr__code img { width: 140px; height: 140px; }
+      .qr__code img { width: 130px; height: 130px; }
+      .qr__step { max-width: 70px; }
     }
   </style>
 </head>
@@ -233,13 +247,22 @@
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=440x440&data=https://renome.zeabur.app&color=2d5a27&bgcolor=ffffff" alt="QR">
     </div>
 
-    <div class="qr__cta">
-      <div class="qr__cta-ro">Meniu &amp; Comand&#259; online</div>
-      <div class="qr__cta-ru">Меню и Заказ онлайн</div>
-    </div>
-
-    <div class="qr__hint">
-      Scaneaz&#259; QR <span>|</span> Сканируй QR
+    <div class="qr__steps">
+      <div class="qr__step">
+        <span class="qr__step-icon">&#128247;</span>
+        <span class="qr__step-ro">Scaneaz&#259;</span>
+        <span class="qr__step-ru">Сканируй</span>
+      </div>
+      <div class="qr__step">
+        <span class="qr__step-icon">&#128196;</span>
+        <span class="qr__step-ro">Alege</span>
+        <span class="qr__step-ru">Выбери</span>
+      </div>
+      <div class="qr__step">
+        <span class="qr__step-icon">&#9989;</span>
+        <span class="qr__step-ro">Comand&#259;</span>
+        <span class="qr__step-ru">Закажи</span>
+      </div>
     </div>
 
     <a href="https://renome.zeabur.app" class="qr__url">renome.zeabur.app</a>
@@ -247,7 +270,7 @@
     <div class="qr__sep"></div>
 
     <div class="qr__info">
-      str. Calea Ie&#537;ilor 57, B&#259;l&#539;i <span>&middot;</span> ул. Каля Ешилор 57<br>
+      str. Calea Ie&#537;ilor 57, B&#259;l&#539;i &middot; ул. Каля Ешилор 57<br>
       10:00 &mdash; 01:00
     </div>
 
