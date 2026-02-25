@@ -12,7 +12,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #f8f7f4;
+      background: linear-gradient(145deg, #f5f0e8 0%, #eae6dc 50%, #f0ece4 100%);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -22,158 +22,269 @@
 
     .qr-card {
       background: #fff;
-      border-radius: 24px;
-      padding: 48px 40px;
+      border-radius: 28px;
+      padding: 52px 44px 44px;
       text-align: center;
-      max-width: 380px;
+      max-width: 400px;
       width: 100%;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      border: 1px solid #eee;
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.04),
+        0 12px 40px rgba(0,0,0,0.08),
+        0 0 0 1px rgba(0,0,0,0.03);
+      position: relative;
+      overflow: hidden;
     }
 
-    .qr-card__logo {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 16px;
+    .qr-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2d5a27, #4a8c3f, #2d5a27);
+    }
+
+    /* --- Header --- */
+    .qr-header {
+      margin-bottom: 28px;
+    }
+
+    .qr-header__logo {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 14px;
       display: block;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
 
-    .qr-card__name {
+    .qr-header__name {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 700;
       color: #1a1a1a;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .qr-card__subtitle {
-      font-size: 13px;
-      color: #888;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 32px;
-    }
-
-    .qr-card__code {
-      background: #fff;
-      border: 2px solid #2d5a27;
-      border-radius: 16px;
-      padding: 16px;
-      display: inline-block;
-      margin-bottom: 24px;
-    }
-
-    .qr-card__code img {
-      display: block;
-      width: 220px;
-      height: 220px;
-    }
-
-    .qr-card__cta {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 20px;
-      font-weight: 600;
-      color: #1a1a1a;
       margin-bottom: 6px;
     }
 
-    .qr-card__cta-line {
+    .qr-header__subtitle {
+      font-size: 11px;
+      color: #999;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .qr-header__subtitle span {
+      margin: 0 6px;
+      color: #ccc;
+    }
+
+    /* --- QR Code --- */
+    .qr-code {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 28px;
+    }
+
+    .qr-code__frame {
+      background: #fff;
+      border: 2px solid #2d5a27;
+      border-radius: 20px;
+      padding: 18px;
+      position: relative;
+    }
+
+    .qr-code__frame::before,
+    .qr-code__frame::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 3px solid #2d5a27;
+      opacity: 0.3;
+    }
+
+    .qr-code__frame::before {
+      top: -6px;
+      left: -6px;
+      border-right: none;
+      border-bottom: none;
+      border-radius: 8px 0 0 0;
+    }
+
+    .qr-code__frame::after {
+      bottom: -6px;
+      right: -6px;
+      border-left: none;
+      border-top: none;
+      border-radius: 0 0 8px 0;
+    }
+
+    .qr-code__img {
+      display: block;
+      width: 200px;
+      height: 200px;
+      border-radius: 8px;
+    }
+
+    /* --- CTA --- */
+    .qr-cta {
+      margin-bottom: 20px;
+    }
+
+    .qr-cta__title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #1a1a1a;
       margin-bottom: 2px;
     }
 
-    .qr-card__cta-line--secondary {
-      font-size: 17px;
-      color: #666;
+    .qr-cta__title-secondary {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: #777;
+      margin-bottom: 16px;
     }
 
-    .qr-card__desc {
-      font-size: 13px;
-      color: #999;
-      line-height: 1.5;
-      margin-bottom: 4px;
-    }
-
-    .qr-card__desc + .qr-card__desc {
-      margin-bottom: 24px;
-    }
-
-    .qr-card__lang-divider {
-      width: 20px;
-      height: 1px;
-      background: #ddd;
-      margin: 10px auto;
-    }
-
-    .qr-card__divider {
-      width: 40px;
-      height: 2px;
-      background: #2d5a27;
-      margin: 0 auto 20px;
-      border-radius: 2px;
-    }
-
-    .qr-card__address {
+    .qr-cta__desc {
       font-size: 12px;
       color: #aaa;
       line-height: 1.6;
     }
 
-    .qr-card__link {
-      display: inline-block;
-      margin-top: 16px;
-      font-size: 12px;
-      color: #888;
+    /* --- Lang divider --- */
+    .qr-lang-sep {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .qr-lang-sep__line {
+      width: 32px;
+      height: 1px;
+      background: #e0e0e0;
+    }
+
+    .qr-lang-sep__dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #2d5a27;
+      opacity: 0.4;
+    }
+
+    /* --- Link fallback --- */
+    .qr-link {
+      margin: 20px 0 28px;
+      padding: 14px 20px;
+      background: #f8f7f4;
+      border-radius: 12px;
+      font-size: 11px;
+      color: #999;
       line-height: 1.5;
     }
 
-    .qr-card__link a {
-      color: #2d5a27;
-      font-weight: 600;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(45,90,39,0.3);
-      transition: border-color 0.2s;
+    .qr-link__label {
+      margin-bottom: 4px;
     }
 
-    .qr-card__link a:hover {
+    .qr-link a {
+      display: inline-block;
+      color: #2d5a27;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      padding: 2px 0;
+      border-bottom: 1.5px solid rgba(45,90,39,0.25);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .qr-link a:hover {
+      color: #1e3d1a;
       border-bottom-color: #2d5a27;
     }
 
-    .qr-card__wifi {
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid #eee;
+    /* --- Footer info --- */
+    .qr-footer {
+      position: relative;
+      padding-top: 20px;
+    }
+
+    .qr-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #2d5a27, transparent);
+      border-radius: 2px;
+    }
+
+    .qr-footer__icon {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: #2d5a27;
+      opacity: 0.5;
+    }
+
+    .qr-footer__address {
       font-size: 12px;
-      color: #888;
+      color: #aaa;
+      line-height: 1.8;
     }
 
-    .qr-card__wifi strong {
-      color: #1a1a1a;
+    .qr-footer__address strong {
+      color: #777;
+      font-weight: 500;
     }
 
+    /* --- Print button --- */
     .qr-print {
-      margin-top: 24px;
+      margin-top: 28px;
     }
 
     .qr-print__btn {
-      display: inline-block;
-      padding: 12px 32px;
-      background: #2d5a27;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 36px;
+      background: linear-gradient(135deg, #2d5a27, #3a7432);
       color: #fff;
       border: none;
       border-radius: 50px;
-      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       letter-spacing: 0.5px;
-      transition: background 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(45,90,39,0.25);
     }
 
     .qr-print__btn:hover {
-      background: #1e3d1a;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(45,90,39,0.35);
     }
 
+    .qr-print__btn:active {
+      transform: translateY(0);
+    }
+
+    .qr-print__btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* --- Print --- */
     @media print {
       body {
         background: #fff;
@@ -181,68 +292,107 @@
       }
       .qr-card {
         box-shadow: none;
-        border: none;
-        padding: 32px 24px;
+        padding: 24px 20px;
         max-width: 100%;
+        border-radius: 0;
+      }
+      .qr-card::before {
+        display: none;
       }
       .qr-print {
         display: none;
       }
+      .qr-link {
+        background: none;
+        border: 1px dashed #ccc;
+      }
     }
 
+    /* --- Mobile --- */
     @media (max-width: 420px) {
       .qr-card {
-        padding: 32px 24px;
-        border-radius: 16px;
+        padding: 36px 24px 32px;
+        border-radius: 20px;
       }
-      .qr-card__name {
-        font-size: 24px;
+      .qr-header__name {
+        font-size: 26px;
+        letter-spacing: 3px;
       }
-      .qr-card__code img {
-        width: 180px;
-        height: 180px;
+      .qr-code__img {
+        width: 170px;
+        height: 170px;
+      }
+      .qr-cta__title {
+        font-size: 20px;
+      }
+      .qr-cta__title-secondary {
+        font-size: 16px;
       }
     }
   </style>
 </head>
 <body>
   <div class="qr-card">
-    <img src="/img/logo-clean.png" alt="Renome" class="qr-card__logo">
-    <div class="qr-card__name">Renome</div>
-    <div class="qr-card__subtitle">Italian Café / Итальянское Кафе</div>
 
-    <div class="qr-card__code">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=440x440&data=https://renome.zeabur.app&color=2d5a27&bgcolor=ffffff" alt="QR Code">
-    </div>
-
-    <div class="qr-card__cta">
-      <div class="qr-card__cta-line">Scanează meniul</div>
-      <div class="qr-card__cta-line qr-card__cta-line--secondary">Сканируй меню</div>
-    </div>
-    <div class="qr-card__desc">
-      Deschide camera telefonului și scanează codul QR<br>
-      pentru a vedea meniul și a comanda online
-    </div>
-    <div class="qr-card__lang-divider"></div>
-    <div class="qr-card__desc">
-      Открой камеру телефона и отсканируй QR-код,<br>
-      чтобы посмотреть меню и заказать онлайн
+    <!-- Header -->
+    <div class="qr-header">
+      <img src="/img/logo-clean.png" alt="Renome" class="qr-header__logo">
+      <div class="qr-header__name">Renome</div>
+      <div class="qr-header__subtitle">Italian Caf&eacute; <span>&middot;</span> Итальянское Кафе</div>
     </div>
 
-    <div class="qr-card__link">
-      Nu poți scana? / Не получается сканировать?<br>
+    <!-- QR Code -->
+    <div class="qr-code">
+      <div class="qr-code__frame">
+        <img class="qr-code__img" src="https://api.qrserver.com/v1/create-qr-code/?size=440x440&data=https://renome.zeabur.app&color=2d5a27&bgcolor=ffffff" alt="QR Code">
+      </div>
+    </div>
+
+    <!-- Call to action -->
+    <div class="qr-cta">
+      <div class="qr-cta__title">Scaneaz&#259; meniul</div>
+      <div class="qr-cta__title-secondary">&#1057;&#1082;&#1072;&#1085;&#1080;&#1088;&#1091;&#1081; &#1084;&#1077;&#1085;&#1102;</div>
+      <div class="qr-cta__desc">
+        Deschide camera telefonului &#537;i scaneaz&#259; codul QR<br>
+        pentru a vedea meniul &#537;i a comanda online
+      </div>
+      <div class="qr-lang-sep">
+        <span class="qr-lang-sep__line"></span>
+        <span class="qr-lang-sep__dot"></span>
+        <span class="qr-lang-sep__line"></span>
+      </div>
+      <div class="qr-cta__desc">
+        &#1054;&#1090;&#1082;&#1088;&#1086;&#1081; &#1082;&#1072;&#1084;&#1077;&#1088;&#1091; &#1090;&#1077;&#1083;&#1077;&#1092;&#1086;&#1085;&#1072; &#1080; &#1086;&#1090;&#1089;&#1082;&#1072;&#1085;&#1080;&#1088;&#1091;&#1081; QR-&#1082;&#1086;&#1076;,<br>
+        &#1095;&#1090;&#1086;&#1073;&#1099; &#1087;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088;&#1077;&#1090;&#1100; &#1084;&#1077;&#1085;&#1102; &#1080; &#1079;&#1072;&#1082;&#1072;&#1079;&#1072;&#1090;&#1100; &#1086;&#1085;&#1083;&#1072;&#1081;&#1085;
+      </div>
+    </div>
+
+    <!-- Link fallback -->
+    <div class="qr-link">
+      <div class="qr-link__label">Nu po&#539;i scana? / &#1053;&#1077; &#1087;&#1086;&#1083;&#1091;&#1095;&#1072;&#1077;&#1090;&#1089;&#1103; &#1089;&#1082;&#1072;&#1085;&#1080;&#1088;&#1086;&#1074;&#1072;&#1090;&#1100;?</div>
       <a href="https://renome.zeabur.app">renome.zeabur.app</a>
     </div>
 
-    <div class="qr-card__divider"></div>
-    <div class="qr-card__address">
-      str. Calea Ieșilor 57, Bălți / ул. Каля Ешилор 57, Бэлць<br>
-      Zilnic / Ежедневно: 10:00 — 01:00
+    <!-- Footer -->
+    <div class="qr-footer">
+      <div class="qr-footer__icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="qr-footer__address">
+        str. Calea Ie&#537;ilor 57, B&#259;l&#539;i<br>
+        <strong>&#1091;&#1083;. &#1050;&#1072;&#1083;&#1103; &#1045;&#1096;&#1080;&#1083;&#1086;&#1088; 57, &#1041;&#1101;&#1083;&#1094;&#1100;</strong><br>
+        Zilnic / &#1045;&#1078;&#1077;&#1076;&#1085;&#1077;&#1074;&#1085;&#1086;: 10:00 &mdash; 01:00
+      </div>
     </div>
 
+    <!-- Print -->
     <div class="qr-print">
-      <button class="qr-print__btn" onclick="window.print()">Printează / Распечатать</button>
+      <button class="qr-print__btn" onclick="window.print()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Printeaz&#259; / &#1056;&#1072;&#1089;&#1087;&#1077;&#1095;&#1072;&#1090;&#1072;&#1090;&#1100;
+      </button>
     </div>
+
   </div>
 </body>
 </html>
