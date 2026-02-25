@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= t.qr.pageTitle %> &mdash; Renome</title>
+  <title>QR Menu &mdash; Renome</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -79,11 +79,31 @@
       margin-bottom: 6px;
     }
 
+    .qr-card__cta-line {
+      margin-bottom: 2px;
+    }
+
+    .qr-card__cta-line--secondary {
+      font-size: 17px;
+      color: #666;
+    }
+
     .qr-card__desc {
       font-size: 13px;
       color: #999;
       line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .qr-card__desc + .qr-card__desc {
       margin-bottom: 24px;
+    }
+
+    .qr-card__lang-divider {
+      width: 20px;
+      height: 1px;
+      background: #ddd;
+      margin: 10px auto;
     }
 
     .qr-card__divider {
@@ -169,23 +189,34 @@
   <div class="qr-card">
     <img src="/img/logo-clean.png" alt="Renome" class="qr-card__logo">
     <div class="qr-card__name">Renome</div>
-    <div class="qr-card__subtitle"><%= t.qr.subtitle %></div>
+    <div class="qr-card__subtitle">Italian Café / Итальянское Кафе</div>
 
     <div class="qr-card__code">
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=440x440&data=https://renome.zeabur.app&color=2d5a27&bgcolor=ffffff" alt="QR Code">
     </div>
 
-    <div class="qr-card__cta"><%= t.qr.cta %></div>
-    <div class="qr-card__desc"><%= t.qr.desc %></div>
+    <div class="qr-card__cta">
+      <div class="qr-card__cta-line">Scanează meniul</div>
+      <div class="qr-card__cta-line qr-card__cta-line--secondary">Сканируй меню</div>
+    </div>
+    <div class="qr-card__desc">
+      Deschide camera telefonului și scanează codul QR<br>
+      pentru a vedea meniul și a comanda online
+    </div>
+    <div class="qr-card__lang-divider"></div>
+    <div class="qr-card__desc">
+      Открой камеру телефона и отсканируй QR-код,<br>
+      чтобы посмотреть меню и заказать онлайн
+    </div>
 
     <div class="qr-card__divider"></div>
     <div class="qr-card__address">
-      <%= t.qr.address %><br>
-      <%= t.qr.schedule %>
+      str. Calea Ieșilor 57, Bălți / ул. Каля Ешилор 57, Бэлць<br>
+      Zilnic / Ежедневно: 10:00 — 01:00
     </div>
 
     <div class="qr-print">
-      <button class="qr-print__btn" onclick="window.print()"><%= t.qr.print %></button>
+      <button class="qr-print__btn" onclick="window.print()">Printează / Распечатать</button>
     </div>
   </div>
 </body>
