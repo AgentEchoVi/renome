@@ -1,5 +1,20 @@
+<%
+  const L = lang === 'ru' ? {
+    subtitle: 'Панель персонала',
+    error: 'Неверный email или пароль',
+    emailPh: 'Email',
+    passwordPh: 'Пароль',
+    login: 'Войти'
+  } : {
+    subtitle: 'Panoul personalului',
+    error: 'Email sau parolă incorectă',
+    emailPh: 'Email',
+    passwordPh: 'Parola',
+    login: 'Autentificare'
+  };
+%>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="<%= lang %>">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -18,20 +33,24 @@
 <body class="staff-login-body">
   <div class="staff-login">
     <div class="staff-login__card">
+      <div class="staff-login__lang">
+        <a href="/set-lang?lang=ro&redirect=/staff/login" class="staff-lang__btn<%= lang === 'ro' ? ' staff-lang__btn--active' : '' %>">RO</a>
+        <a href="/set-lang?lang=ru&redirect=/staff/login" class="staff-lang__btn<%= lang === 'ru' ? ' staff-lang__btn--active' : '' %>">RU</a>
+      </div>
       <div class="staff-login__logo">RENOME</div>
-      <div class="staff-login__subtitle">Панель персонала</div>
+      <div class="staff-login__subtitle"><%= L.subtitle %></div>
 
       <% if (locals.error === 'invalid') { %>
-        <div class="staff-error">Неверный email или пароль</div>
+        <div class="staff-error"><%= L.error %></div>
       <% } %>
 
       <form method="POST" action="/staff/login" class="staff-form">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <input type="email" name="email" class="staff-input" required
-          placeholder="Email" autocomplete="email" inputmode="email">
+          placeholder="<%= L.emailPh %>" autocomplete="email" inputmode="email">
         <input type="password" name="password" class="staff-input" required
-          placeholder="Пароль" autocomplete="current-password">
-        <button type="submit" class="staff-btn">Войти</button>
+          placeholder="<%= L.passwordPh %>" autocomplete="current-password">
+        <button type="submit" class="staff-btn"><%= L.login %></button>
       </form>
     </div>
   </div>

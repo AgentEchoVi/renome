@@ -200,6 +200,46 @@ body.staff-body {
   color: var(--s-text);
 }
 
+/* Language Toggle */
+
+.staff-lang {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.staff-lang__btn {
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--s-font);
+  color: var(--s-text3);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.staff-lang__btn--active {
+  background: var(--s-accent);
+  color: #fff;
+}
+
+.staff-login__lang {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 2px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ============================================================
    SSE STATUS INDICATOR
    ============================================================ */
@@ -369,6 +409,12 @@ body.staff-body {
   text-decoration: none;
   font-size: 14px;
   white-space: nowrap;
+}
+
+.staff-order-card__email {
+  font-size: 12px;
+  color: var(--s-text2);
+  margin-top: 2px;
 }
 
 .staff-order-card__phone:active {

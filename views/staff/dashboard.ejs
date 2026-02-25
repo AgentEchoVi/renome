@@ -1,5 +1,40 @@
+<%
+  const L = lang === 'ru' ? {
+    online: 'Онлайн',
+    connecting: 'Подключение...',
+    logout: 'Выйти',
+    ordersToday: 'заказов сегодня',
+    revenue: 'выручка',
+    waiting: 'Ожидание новых заказов...',
+    willNotify: 'Вы получите уведомление',
+    delivery: 'Доставка',
+    pickup: 'Самовывоз',
+    cash: 'Наличные',
+    card: 'Карта',
+    total: 'Итого',
+    enableNotif: 'Включите уведомления, чтобы не пропустить заказы',
+    enable: 'Включить',
+    later: 'Позже'
+  } : {
+    online: 'Online',
+    connecting: 'Conectare...',
+    logout: 'Ieșire',
+    ordersToday: 'comenzi azi',
+    revenue: 'venit',
+    waiting: 'Așteptarea comenzilor noi...',
+    willNotify: 'Veți primi o notificare',
+    delivery: 'Livrare',
+    pickup: 'Ridicare',
+    cash: 'Numerar',
+    card: 'Card',
+    total: 'Total',
+    enableNotif: 'Activați notificările pentru a nu rata comenzile',
+    enable: 'Activați',
+    later: 'Mai târziu'
+  };
+%>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="<%= lang %>">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -24,11 +59,15 @@
       <span class="staff-topbar__label">Staff</span>
     </div>
     <div class="staff-topbar__right">
+      <div class="staff-lang">
+        <a href="/set-lang?lang=ro&redirect=/staff" class="staff-lang__btn<%= lang === 'ro' ? ' staff-lang__btn--active' : '' %>">RO</a>
+        <a href="/set-lang?lang=ru&redirect=/staff" class="staff-lang__btn<%= lang === 'ru' ? ' staff-lang__btn--active' : '' %>">RU</a>
+      </div>
       <span class="staff-status" id="sseStatus">
         <span class="staff-status__dot"></span>
-        <span class="staff-status__text">Подключение...</span>
+        <span class="staff-status__text"><%= L.connecting %></span>
       </span>
-      <a href="/staff/logout" class="staff-topbar__logout">Выйти</a>
+      <a href="/staff/logout" class="staff-topbar__logout"><%= L.logout %></a>
     </div>
   </header>
 
@@ -36,11 +75,11 @@
   <div class="staff-stats">
     <div class="staff-stats__item">
       <span class="staff-stats__value" id="orderCount"><%= orders.length %></span>
-      <span class="staff-stats__label">заказов сегодня</span>
+      <span class="staff-stats__label"><%= L.ordersToday %></span>
     </div>
     <div class="staff-stats__item">
       <span class="staff-stats__value" id="orderTotal"><%= orders.reduce((s, o) => s + o.total, 0) %> MDL</span>
-      <span class="staff-stats__label">выручка</span>
+      <span class="staff-stats__label"><%= L.revenue %></span>
     </div>
   </div>
 
@@ -55,8 +94,8 @@
             <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
           </svg>
         </div>
-        <p class="staff-empty__text">Ожидание новых заказов...</p>
-        <p class="staff-empty__sub">Вы получите уведомление</p>
+        <p class="staff-empty__text"><%= L.waiting %></p>
+        <p class="staff-empty__sub"><%= L.willNotify %></p>
       </div>
     <% } %>
 
@@ -68,16 +107,21 @@
         </div>
 
         <div class="staff-order-card__customer">
-          <div class="staff-order-card__name"><%= order.customer_name %></div>
+          <div>
+            <div class="staff-order-card__name"><%= order.customer_name %></div>
+            <% if (order.customer_email) { %>
+              <div class="staff-order-card__email"><%= order.customer_email %></div>
+            <% } %>
+          </div>
           <a href="tel:<%= order.customer_phone %>" class="staff-order-card__phone"><%= order.customer_phone %></a>
         </div>
 
         <div class="staff-order-card__type">
           <span class="staff-badge staff-badge--<%= order.delivery_type %>">
-            <%= order.delivery_type === 'delivery' ? 'Доставка' : 'Самовывоз' %>
+            <%= order.delivery_type === 'delivery' ? L.delivery : L.pickup %>
           </span>
           <span class="staff-badge staff-badge--payment">
-            <%= order.payment_method === 'cash' ? 'Наличные' : 'Карта' %>
+            <%= order.payment_method === 'cash' ? L.cash : L.card %>
           </span>
         </div>
 
@@ -103,7 +147,7 @@
         <% } %>
 
         <div class="staff-order-card__total">
-          <span>Итого</span>
+          <span><%= L.total %></span>
           <span><%= order.total %> MDL</span>
         </div>
       </div>
@@ -113,11 +157,14 @@
 
   <!-- Notification permission banner -->
   <div class="staff-notify-banner" id="notifyBanner" style="display:none">
-    <span>Включите уведомления, чтобы не пропустить заказы</span>
-    <button class="staff-notify-btn" id="enableNotifyBtn">Включить</button>
-    <button class="staff-notify-dismiss" id="dismissNotifyBtn">Позже</button>
+    <span><%= L.enableNotif %></span>
+    <button class="staff-notify-btn" id="enableNotifyBtn"><%= L.enable %></button>
+    <button class="staff-notify-dismiss" id="dismissNotifyBtn"><%= L.later %></button>
   </div>
 
+  <script>
+    window.STAFF_LANG = '<%= lang %>';
+  </script>
   <script src="/js/staff.js"></script>
 </body>
 </html>

@@ -1,6 +1,30 @@
 (function() {
   'use strict';
 
+  // === Translations ===
+  var lang = window.STAFF_LANG || 'ro';
+  var T = lang === 'ru' ? {
+    connected: 'Онлайн',
+    reconnecting: 'Переподключение...',
+    disconnected: 'Офлайн',
+    delivery: 'Доставка',
+    pickup: 'Самовывоз',
+    cash: 'Наличные',
+    card: 'Карта',
+    total: 'Итого',
+    newOrder: 'Новый заказ'
+  } : {
+    connected: 'Online',
+    reconnecting: 'Reconectare...',
+    disconnected: 'Offline',
+    delivery: 'Livrare',
+    pickup: 'Ridicare',
+    cash: 'Numerar',
+    card: 'Card',
+    total: 'Total',
+    newOrder: 'Comandă nouă'
+  };
+
   // === DOM refs ===
   var statusDot = document.querySelector('.staff-status__dot');
   var statusText = document.querySelector('.staff-status__text');
@@ -18,8 +42,7 @@
   function setStatus(state) {
     if (statusDot) statusDot.className = 'staff-status__dot staff-status__dot--' + state;
     if (statusText) {
-      var texts = { connected: 'Онлайн', reconnecting: 'Переподключение...', disconnected: 'Офлайн' };
-      statusText.textContent = texts[state] || state;
+      statusText.textContent = T[state] || state;
     }
   }
 
@@ -51,17 +74,14 @@
 
   // === Handle New Order ===
   function handleNewOrder(order) {
-    // Remove empty state
     if (emptyState) {
       emptyState.remove();
       emptyState = null;
     }
 
-    // Build and insert card
     var html = buildOrderCard(order);
     container.insertAdjacentHTML('afterbegin', html);
 
-    // Animate
     var newCard = container.firstElementChild;
     if (newCard) {
       newCard.classList.add('staff-order-card--new');
@@ -70,18 +90,13 @@
       }, 2000);
     }
 
-    // Update stats
     updateStats(order);
-
-    // Sound
     playNotificationSound();
 
-    // Vibrate
     if (navigator.vibrate) {
       navigator.vibrate([200, 100, 200]);
     }
 
-    // Browser notification
     showBrowserNotification(order);
   }
 
@@ -97,8 +112,8 @@
         '</div>';
     }
 
-    var typeLabel = order.delivery_type === 'delivery' ? 'Доставка' : 'Самовывоз';
-    var payLabel = order.payment_method === 'cash' ? 'Наличные' : 'Карта';
+    var typeLabel = order.delivery_type === 'delivery' ? T.delivery : T.pickup;
+    var payLabel = order.payment_method === 'cash' ? T.cash : T.card;
     var time = new Date(order.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
 
     var h = '<div class="staff-order-card" data-order-id="' + order.id + '">';
@@ -108,7 +123,12 @@
     h += '</div>';
 
     h += '<div class="staff-order-card__customer">';
+    h += '<div>';
     h += '<div class="staff-order-card__name">' + esc(order.customer_name) + '</div>';
+    if (order.customer_email) {
+      h += '<div class="staff-order-card__email">' + esc(order.customer_email) + '</div>';
+    }
+    h += '</div>';
     h += '<a href="tel:' + esc(order.customer_phone) + '" class="staff-order-card__phone">' + esc(order.customer_phone) + '</a>';
     h += '</div>';
 
@@ -130,7 +150,7 @@
       h += '<div class="staff-order-card__comment">"' + esc(order.comment) + '"</div>';
     }
 
-    h += '<div class="staff-order-card__total"><span>Итого</span><span>' + order.total + ' MDL</span></div>';
+    h += '<div class="staff-order-card__total"><span>' + T.total + '</span><span>' + order.total + ' MDL</span></div>';
     h += '</div>';
     return h;
   }
@@ -154,7 +174,7 @@
     }
   }
 
-  // === Audio — Web Audio API (no mp3 needed) ===
+  // === Audio — Web Audio API ===
   var audioCtx = null;
 
   function playNotificationSound() {
@@ -192,7 +212,7 @@
     var body = order.customer_name + ' · ' + order.total + ' MDL\n' + items;
 
     try {
-      var n = new Notification('Новый заказ #' + order.id, {
+      var n = new Notification(T.newOrder + ' #' + order.id, {
         body: body,
         icon: '/img/logo.png',
         badge: '/img/logo.png',
@@ -233,16 +253,12 @@
       .catch(function(err) { console.log('Staff SW registration failed:', err); });
   }
 
-  // === Activate audio on first tap (iOS requirement) ===
-  var audioActivated = false;
+  // === Activate audio on first tap (iOS) ===
   document.addEventListener('click', function() {
-    if (!audioActivated) {
-      audioActivated = true;
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-      } catch (e) { /* ok */ }
-    }
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    } catch (e) { /* ok */ }
   }, { once: true });
 
   // === Start SSE ===
