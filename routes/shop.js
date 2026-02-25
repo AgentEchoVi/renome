@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/init');
+const orderEmitter = require('../lib/orderEvents');
 
 // Helper: get localized field from DB row
 function L(item, field, lang) {
@@ -123,6 +124,14 @@ router.post('/checkout', (req, res) => {
   });
 
   const orderId = placeOrder();
+
+  // Broadcast to staff SSE clients
+  const fullOrder = db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
+  if (fullOrder) {
+    fullOrder.items = resolvedItems;
+    orderEmitter.emit('new-order', fullOrder);
+  }
+
   res.json({ success: true, orderId });
 });
 

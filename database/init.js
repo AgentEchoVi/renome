@@ -107,6 +107,9 @@ const adminPassword = crypto.createHash('sha256').update('admin123').digest('hex
 const insertUser = db.prepare('INSERT OR IGNORE INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
 insertUser.run('admin@renome.md', adminPassword, 'Admin', 'admin');
 
+const staffPassword = crypto.createHash('sha256').update('staff123').digest('hex');
+insertUser.run('staff@renome.md', staffPassword, 'Staff', 'staff');
+
 // ============================================================
 // SEED CATEGORIES
 // ============================================================

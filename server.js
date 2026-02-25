@@ -10,6 +10,13 @@ const PORT = process.env.PORT || 3002;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Service worker with scope header (must be before express.static)
+app.get('/sw-staff.js', (req, res) => {
+  res.setHeader('Service-Worker-Allowed', '/staff');
+  res.sendFile(path.join(__dirname, 'public', 'sw-staff.js'));
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -52,6 +59,7 @@ app.use((req, res, next) => {
 app.use('/', require('./routes/shop'));
 app.use('/auth', require('./routes/auth'));
 app.use('/admin', require('./routes/admin'));
+app.use('/staff', require('./routes/staff'));
 
 const { isAuth } = require('./middleware/auth');
 app.get('/account', isAuth, (req, res) => {

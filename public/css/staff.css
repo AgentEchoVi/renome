@@ -1,0 +1,634 @@
+/* ============================================================
+   RENOME STAFF PWA — Dark Theme
+   ============================================================ */
+
+:root {
+  --s-bg: #0D0D0D;
+  --s-bg2: #111111;
+  --s-card: #1A1A1A;
+  --s-card-border: #2A2A2A;
+  --s-card-new: #1A2418;
+  --s-text: #F0F0F0;
+  --s-text2: #8A8A8A;
+  --s-text3: #555555;
+  --s-accent: #B8914A;
+  --s-accent-dim: rgba(184, 145, 74, 0.15);
+  --s-green: #4ADE80;
+  --s-blue: #3B82F6;
+  --s-amber: #F59E0B;
+  --s-red: #EF4444;
+  --s-radius: 12px;
+  --s-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body.staff-body,
+body.staff-login-body {
+  font-family: var(--s-font);
+  background: var(--s-bg);
+  color: var(--s-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  height: 100%;
+}
+
+body.staff-body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+
+.staff-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 24px;
+}
+
+.staff-login__card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--s-card);
+  border: 1px solid var(--s-card-border);
+  border-radius: 16px;
+  padding: 40px 32px;
+  text-align: center;
+}
+
+.staff-login__logo {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: var(--s-accent);
+  margin-bottom: 4px;
+}
+
+.staff-login__subtitle {
+  font-size: 13px;
+  color: var(--s-text2);
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.staff-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--s-red);
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.staff-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.staff-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--s-bg);
+  border: 1px solid var(--s-card-border);
+  border-radius: 10px;
+  color: var(--s-text);
+  font-family: var(--s-font);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.staff-input::placeholder {
+  color: var(--s-text3);
+}
+
+.staff-input:focus {
+  border-color: var(--s-accent);
+}
+
+.staff-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--s-accent);
+  color: #fff;
+  font-family: var(--s-font);
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 6px;
+}
+
+.staff-btn:active {
+  opacity: 0.8;
+}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+
+.staff-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 56px;
+  min-height: 56px;
+  background: var(--s-bg2);
+  border-bottom: 1px solid var(--s-card-border);
+  flex-shrink: 0;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.staff-topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.staff-topbar__logo {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--s-accent);
+}
+
+.staff-topbar__label {
+  font-size: 12px;
+  color: var(--s-text2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.staff-topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.staff-topbar__logout {
+  color: var(--s-text2);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.staff-topbar__logout:hover {
+  color: var(--s-text);
+}
+
+/* ============================================================
+   SSE STATUS INDICATOR
+   ============================================================ */
+
+.staff-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.staff-status__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--s-text3);
+  transition: background 0.3s;
+}
+
+.staff-status__dot--connected {
+  background: var(--s-green);
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
+.staff-status__dot--reconnecting {
+  background: var(--s-amber);
+  animation: statusPulse 1.5s ease-in-out infinite;
+}
+
+.staff-status__dot--disconnected {
+  background: var(--s-red);
+}
+
+.staff-status__text {
+  font-size: 11px;
+  color: var(--s-text2);
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ============================================================
+   STATS BAR
+   ============================================================ */
+
+.staff-stats {
+  display: flex;
+  padding: 14px 16px;
+  gap: 24px;
+  border-bottom: 1px solid var(--s-card-border);
+  flex-shrink: 0;
+  background: var(--s-bg2);
+}
+
+.staff-stats__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.staff-stats__value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--s-accent);
+}
+
+.staff-stats__label {
+  font-size: 11px;
+  color: var(--s-text2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   ORDERS CONTAINER
+   ============================================================ */
+
+.staff-orders {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+}
+
+.staff-orders::-webkit-scrollbar {
+  width: 4px;
+}
+
+.staff-orders::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.staff-orders::-webkit-scrollbar-thumb {
+  background: var(--s-card-border);
+  border-radius: 4px;
+}
+
+/* ============================================================
+   ORDER CARD
+   ============================================================ */
+
+.staff-order-card {
+  background: var(--s-card);
+  border: 1px solid var(--s-card-border);
+  border-radius: var(--s-radius);
+  padding: 16px;
+  transition: border-color 0.4s, background 0.4s;
+}
+
+.staff-order-card--new {
+  animation: cardSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border-color: var(--s-accent);
+  background: var(--s-card-new);
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.staff-order-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.staff-order-card__id {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--s-accent);
+}
+
+.staff-order-card__time {
+  font-size: 13px;
+  color: var(--s-text2);
+}
+
+/* Customer */
+
+.staff-order-card__customer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.staff-order-card__name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.staff-order-card__phone {
+  color: var(--s-blue);
+  text-decoration: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.staff-order-card__phone:active {
+  opacity: 0.7;
+}
+
+/* Badges */
+
+.staff-order-card__type {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.staff-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.staff-badge--delivery {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--s-blue);
+}
+
+.staff-badge--pickup {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--s-amber);
+}
+
+.staff-badge--payment {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--s-text2);
+}
+
+/* Address */
+
+.staff-order-card__address {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--s-text2);
+  font-size: 13px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.staff-order-card__address svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Items */
+
+.staff-order-card__items {
+  border-top: 1px solid var(--s-card-border);
+  padding-top: 10px;
+}
+
+.staff-item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  font-size: 14px;
+}
+
+.staff-item-row:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.staff-item-row__qty {
+  color: var(--s-accent);
+  font-weight: 700;
+  min-width: 30px;
+  font-size: 13px;
+}
+
+.staff-item-row__name {
+  flex: 1;
+  color: var(--s-text);
+}
+
+.staff-item-row__price {
+  color: var(--s-text2);
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+/* Comment */
+
+.staff-order-card__comment {
+  font-style: italic;
+  color: var(--s-text2);
+  font-size: 13px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  margin-top: 10px;
+  border-left: 3px solid var(--s-accent-dim);
+}
+
+/* Total */
+
+.staff-order-card__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--s-card-border);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--s-accent);
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.staff-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 12px;
+  color: var(--s-text3);
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.staff-empty__icon {
+  width: 64px;
+  height: 64px;
+  animation: emptyPulse 3s ease-in-out infinite;
+  color: var(--s-text3);
+}
+
+.staff-empty__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.staff-empty__text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--s-text2);
+}
+
+.staff-empty__sub {
+  font-size: 13px;
+}
+
+@keyframes emptyPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+/* ============================================================
+   NOTIFICATION BANNER
+   ============================================================ */
+
+.staff-notify-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 14px 16px;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  background: #1F1F1F;
+  border-top: 1px solid var(--s-card-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--s-text2);
+  z-index: 100;
+}
+
+.staff-notify-btn {
+  padding: 8px 16px;
+  background: var(--s-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--s-font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.staff-notify-btn:active {
+  opacity: 0.8;
+}
+
+.staff-notify-dismiss {
+  padding: 8px 12px;
+  background: transparent;
+  color: var(--s-text3);
+  border: 1px solid var(--s-card-border);
+  border-radius: 8px;
+  font-family: var(--s-font);
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   SOUND TEST BUTTON (optional)
+   ============================================================ */
+
+.staff-sound-test {
+  display: none;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 380px) {
+  .staff-order-card {
+    padding: 14px 12px;
+  }
+
+  .staff-order-card__id {
+    font-size: 16px;
+  }
+
+  .staff-order-card__total {
+    font-size: 16px;
+  }
+
+  .staff-stats {
+    gap: 16px;
+  }
+
+  .staff-stats__value {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .staff-orders {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .staff-login__card {
+    padding: 48px 40px;
+  }
+}

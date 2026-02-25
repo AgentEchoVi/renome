@@ -12,4 +12,12 @@ function isAdmin(req, res, next) {
   res.status(403).send(msg);
 }
 
-module.exports = { isAuth, isAdmin };
+function isStaff(req, res, next) {
+  if (req.session && req.session.user &&
+      (req.session.user.role === 'staff' || req.session.user.role === 'admin')) {
+    return next();
+  }
+  res.redirect('/staff/login');
+}
+
+module.exports = { isAuth, isAdmin, isStaff };
