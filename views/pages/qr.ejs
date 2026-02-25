@@ -181,33 +181,75 @@
     /* --- Link fallback --- */
     .qr-link {
       margin: 20px 0 28px;
-      padding: 14px 20px;
-      background: #f8f7f4;
-      border-radius: 12px;
-      font-size: 11px;
-      color: #999;
-      line-height: 1.5;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #f9f8f5, #f3f1ec);
+      border-radius: 14px;
+      border: 1px solid #ece9e2;
     }
 
-    .qr-link__label {
-      margin-bottom: 4px;
+    .qr-link__hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #aaa;
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
+    }
+
+    .qr-link__hint svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .qr-link__or {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .qr-link__or-line {
+      flex: 1;
+      height: 1px;
+      background: #e0ddd6;
+    }
+
+    .qr-link__or-text {
+      font-size: 10px;
+      color: #bbb;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
     }
 
     .qr-link a {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       color: #2d5a27;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 15px;
+      font-weight: 700;
       text-decoration: none;
       letter-spacing: 0.3px;
-      padding: 2px 0;
-      border-bottom: 1.5px solid rgba(45,90,39,0.25);
-      transition: border-color 0.2s, color 0.2s;
+      transition: color 0.2s;
+    }
+
+    .qr-link a svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s;
     }
 
     .qr-link a:hover {
       color: #1e3d1a;
-      border-bottom-color: #2d5a27;
+    }
+
+    .qr-link a:hover svg {
+      transform: translateX(2px);
     }
 
     /* --- Footer info --- */
@@ -369,8 +411,19 @@
 
     <!-- Link fallback -->
     <div class="qr-link">
-      <div class="qr-link__label">Nu po&#539;i scana? / &#1053;&#1077; &#1087;&#1086;&#1083;&#1091;&#1095;&#1072;&#1077;&#1090;&#1089;&#1103; &#1089;&#1082;&#1072;&#1085;&#1080;&#1088;&#1086;&#1074;&#1072;&#1090;&#1100;?</div>
-      <a href="https://renome.zeabur.app">renome.zeabur.app</a>
+      <div class="qr-link__or">
+        <span class="qr-link__or-line"></span>
+        <span class="qr-link__or-text">sau / или</span>
+        <span class="qr-link__or-line"></span>
+      </div>
+      <div class="qr-link__hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Introdu &#238;n browser / Введи в браузере
+      </div>
+      <a href="https://renome.zeabur.app">
+        renome.zeabur.app
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
     </div>
 
     <!-- Footer -->
