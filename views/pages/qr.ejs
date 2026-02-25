@@ -12,440 +12,213 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(145deg, #f5f0e8 0%, #eae6dc 50%, #f0ece4 100%);
+      background: #f4f1ec;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px;
+      padding: 16px;
     }
 
-    .qr-card {
+    /* --- Card --- */
+    .qr {
       background: #fff;
-      border-radius: 28px;
-      padding: 52px 44px 44px;
+      border-radius: 24px;
+      width: 320px;
+      padding: 32px 28px 28px;
       text-align: center;
-      max-width: 400px;
-      width: 100%;
-      box-shadow:
-        0 2px 8px rgba(0,0,0,0.04),
-        0 12px 40px rgba(0,0,0,0.08),
-        0 0 0 1px rgba(0,0,0,0.03);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
       position: relative;
-      overflow: hidden;
     }
 
-    .qr-card::before {
+    .qr::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
+      top: 0; left: 0; right: 0;
+      height: 3px;
       background: linear-gradient(90deg, #2d5a27, #4a8c3f, #2d5a27);
+      border-radius: 24px 24px 0 0;
     }
 
-    /* --- Header --- */
-    .qr-header {
-      margin-bottom: 28px;
-    }
-
-    .qr-header__logo {
-      width: 56px;
-      height: 56px;
-      margin: 0 auto 14px;
+    /* --- Logo + Name --- */
+    .qr__logo {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 8px;
       display: block;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
 
-    .qr-header__name {
+    .qr__name {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
+      font-size: 26px;
       font-weight: 700;
       color: #1a1a1a;
       letter-spacing: 4px;
       text-transform: uppercase;
-      margin-bottom: 6px;
+      line-height: 1;
+      margin-bottom: 4px;
     }
 
-    .qr-header__subtitle {
-      font-size: 11px;
-      color: #999;
-      letter-spacing: 2px;
+    .qr__type {
+      font-size: 9px;
+      color: #aaa;
+      letter-spacing: 2.5px;
       text-transform: uppercase;
-    }
-
-    .qr-header__subtitle span {
-      margin: 0 6px;
-      color: #ccc;
-    }
-
-    /* --- QR Code --- */
-    .qr-code {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 28px;
-    }
-
-    .qr-code__frame {
-      background: #fff;
-      border: 2px solid #2d5a27;
-      border-radius: 20px;
-      padding: 18px;
-      position: relative;
-    }
-
-    .qr-code__frame::before,
-    .qr-code__frame::after {
-      content: '';
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      border: 3px solid #2d5a27;
-      opacity: 0.3;
-    }
-
-    .qr-code__frame::before {
-      top: -6px;
-      left: -6px;
-      border-right: none;
-      border-bottom: none;
-      border-radius: 8px 0 0 0;
-    }
-
-    .qr-code__frame::after {
-      bottom: -6px;
-      right: -6px;
-      border-left: none;
-      border-top: none;
-      border-radius: 0 0 8px 0;
-    }
-
-    .qr-code__img {
-      display: block;
-      width: 200px;
-      height: 200px;
-      border-radius: 8px;
-    }
-
-    /* --- CTA --- */
-    .qr-cta {
       margin-bottom: 20px;
     }
 
-    .qr-cta__title {
+    .qr__type span { color: #ccc; margin: 0 4px; }
+
+    /* --- QR image --- */
+    .qr__code {
+      border: 2px solid #2d5a27;
+      border-radius: 16px;
+      padding: 12px;
+      display: inline-block;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .qr__code img {
+      display: block;
+      width: 180px;
+      height: 180px;
+    }
+
+    /* --- CTA text --- */
+    .qr__cta {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
+      font-size: 19px;
       font-weight: 600;
       color: #1a1a1a;
-      margin-bottom: 2px;
-    }
-
-    .qr-cta__title-secondary {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 18px;
-      font-weight: 500;
-      color: #777;
-      margin-bottom: 16px;
-    }
-
-    .qr-cta__desc {
-      font-size: 12px;
-      color: #aaa;
-      line-height: 1.6;
-    }
-
-    /* --- Lang divider --- */
-    .qr-lang-sep {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin: 14px 0;
-    }
-
-    .qr-lang-sep__line {
-      width: 32px;
-      height: 1px;
-      background: #e0e0e0;
-    }
-
-    .qr-lang-sep__dot {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: #2d5a27;
-      opacity: 0.4;
-    }
-
-    /* --- Link fallback --- */
-    .qr-link {
-      margin: 20px 0 28px;
-      padding: 16px 24px;
-      background: linear-gradient(135deg, #f9f8f5, #f3f1ec);
-      border-radius: 14px;
-      border: 1px solid #ece9e2;
-    }
-
-    .qr-link__hint {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 11px;
-      color: #aaa;
-      margin-bottom: 10px;
-      letter-spacing: 0.3px;
-    }
-
-    .qr-link__hint svg {
-      width: 14px;
-      height: 14px;
-      flex-shrink: 0;
-      opacity: 0.5;
-    }
-
-    .qr-link__or {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      line-height: 1.3;
       margin-bottom: 12px;
     }
 
-    .qr-link__or-line {
-      flex: 1;
-      height: 1px;
-      background: #e0ddd6;
+    .qr__cta small {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      color: #888;
     }
 
-    .qr-link__or-text {
+    /* --- Link --- */
+    .qr__url {
+      display: inline-block;
+      padding: 6px 16px;
+      background: #f5f3ef;
+      border-radius: 20px;
+      font-size: 11px;
+      color: #2d5a27;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      margin-bottom: 16px;
+      transition: background 0.2s;
+    }
+
+    .qr__url:hover { background: #ece9e2; }
+
+    /* --- Divider --- */
+    .qr__sep {
+      width: 28px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #2d5a27, transparent);
+      margin: 0 auto 12px;
+    }
+
+    /* --- Footer --- */
+    .qr__info {
       font-size: 10px;
       color: #bbb;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      font-weight: 600;
+      line-height: 1.7;
     }
 
-    .qr-link a {
+    /* --- Print button (screen only) --- */
+    .qr__print {
+      margin-top: 20px;
+    }
+
+    .qr__print-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: #2d5a27;
-      font-size: 15px;
-      font-weight: 700;
-      text-decoration: none;
-      letter-spacing: 0.3px;
-      transition: color 0.2s;
-    }
-
-    .qr-link a svg {
-      width: 14px;
-      height: 14px;
-      transition: transform 0.2s;
-    }
-
-    .qr-link a:hover {
-      color: #1e3d1a;
-    }
-
-    .qr-link a:hover svg {
-      transform: translateX(2px);
-    }
-
-    /* --- Footer info --- */
-    .qr-footer {
-      position: relative;
-      padding-top: 20px;
-    }
-
-    .qr-footer::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #2d5a27, transparent);
-      border-radius: 2px;
-    }
-
-    .qr-footer__icon {
-      display: inline-block;
-      margin-bottom: 10px;
-      color: #2d5a27;
-      opacity: 0.5;
-    }
-
-    .qr-footer__address {
-      font-size: 12px;
-      color: #aaa;
-      line-height: 1.8;
-    }
-
-    .qr-footer__address strong {
-      color: #777;
-      font-weight: 500;
-    }
-
-    /* --- Print button --- */
-    .qr-print {
-      margin-top: 28px;
-    }
-
-    .qr-print__btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 36px;
-      background: linear-gradient(135deg, #2d5a27, #3a7432);
+      padding: 10px 28px;
+      background: #2d5a27;
       color: #fff;
       border: none;
       border-radius: 50px;
       font-family: 'Inter', sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      letter-spacing: 0.5px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 16px rgba(45,90,39,0.25);
+      transition: background 0.2s;
     }
 
-    .qr-print__btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba(45,90,39,0.35);
-    }
+    .qr__print-btn:hover { background: #1e3d1a; }
 
-    .qr-print__btn:active {
-      transform: translateY(0);
-    }
+    .qr__print-btn svg { width: 14px; height: 14px; }
 
-    .qr-print__btn svg {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-    }
-
-    /* --- Print --- */
+    /* ====== PRINT ====== */
     @media print {
-      body {
-        background: #fff;
-        padding: 0;
-      }
-      .qr-card {
+      @page { size: 90mm 130mm; margin: 0; }
+
+      body { background: #fff; padding: 0; min-height: auto; }
+
+      .qr {
         box-shadow: none;
-        padding: 24px 20px;
-        max-width: 100%;
         border-radius: 0;
+        width: 100%;
+        padding: 20px 16px 16px;
       }
-      .qr-card::before {
-        display: none;
-      }
-      .qr-print {
-        display: none;
-      }
-      .qr-link {
-        background: none;
-        border: 1px dashed #ccc;
-      }
+
+      .qr::before { display: none; }
+      .qr__print { display: none; }
+      .qr__url { background: #f0f0f0; }
     }
 
-    /* --- Mobile --- */
-    @media (max-width: 420px) {
-      .qr-card {
-        padding: 36px 24px 32px;
-        border-radius: 20px;
+    /* ====== Mobile ====== */
+    @media (max-width: 360px) {
+      .qr {
+        width: 100%;
+        padding: 24px 20px 20px;
+        border-radius: 18px;
       }
-      .qr-header__name {
-        font-size: 26px;
-        letter-spacing: 3px;
-      }
-      .qr-code__img {
-        width: 170px;
-        height: 170px;
-      }
-      .qr-cta__title {
-        font-size: 20px;
-      }
-      .qr-cta__title-secondary {
-        font-size: 16px;
-      }
+      .qr__name { font-size: 22px; }
+      .qr__code img { width: 160px; height: 160px; }
     }
   </style>
 </head>
 <body>
-  <div class="qr-card">
+  <div class="qr">
+    <img src="/img/logo-clean.png" alt="Renome" class="qr__logo">
+    <div class="qr__name">Renome</div>
+    <div class="qr__type">Italian Caf&eacute; <span>&middot;</span> Итальянское Кафе</div>
 
-    <!-- Header -->
-    <div class="qr-header">
-      <img src="/img/logo-clean.png" alt="Renome" class="qr-header__logo">
-      <div class="qr-header__name">Renome</div>
-      <div class="qr-header__subtitle">Italian Caf&eacute; <span>&middot;</span> Итальянское Кафе</div>
+    <div class="qr__code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=440x440&data=https://renome.zeabur.app&color=2d5a27&bgcolor=ffffff" alt="QR">
     </div>
 
-    <!-- QR Code -->
-    <div class="qr-code">
-      <div class="qr-code__frame">
-        <img class="qr-code__img" src="https://api.qrserver.com/v1/create-qr-code/?size=440x440&data=https://renome.zeabur.app&color=2d5a27&bgcolor=ffffff" alt="QR Code">
-      </div>
+    <div class="qr__cta">
+      Scaneaz&#259; meniul
+      <small>Сканируй меню</small>
     </div>
 
-    <!-- Call to action -->
-    <div class="qr-cta">
-      <div class="qr-cta__title">Scaneaz&#259; meniul</div>
-      <div class="qr-cta__title-secondary">&#1057;&#1082;&#1072;&#1085;&#1080;&#1088;&#1091;&#1081; &#1084;&#1077;&#1085;&#1102;</div>
-      <div class="qr-cta__desc">
-        Deschide camera telefonului &#537;i scaneaz&#259; codul QR<br>
-        pentru a vedea meniul &#537;i a comanda online
-      </div>
-      <div class="qr-lang-sep">
-        <span class="qr-lang-sep__line"></span>
-        <span class="qr-lang-sep__dot"></span>
-        <span class="qr-lang-sep__line"></span>
-      </div>
-      <div class="qr-cta__desc">
-        &#1054;&#1090;&#1082;&#1088;&#1086;&#1081; &#1082;&#1072;&#1084;&#1077;&#1088;&#1091; &#1090;&#1077;&#1083;&#1077;&#1092;&#1086;&#1085;&#1072; &#1080; &#1086;&#1090;&#1089;&#1082;&#1072;&#1085;&#1080;&#1088;&#1091;&#1081; QR-&#1082;&#1086;&#1076;,<br>
-        &#1095;&#1090;&#1086;&#1073;&#1099; &#1087;&#1086;&#1089;&#1084;&#1086;&#1090;&#1088;&#1077;&#1090;&#1100; &#1084;&#1077;&#1085;&#1102; &#1080; &#1079;&#1072;&#1082;&#1072;&#1079;&#1072;&#1090;&#1100; &#1086;&#1085;&#1083;&#1072;&#1081;&#1085;
-      </div>
+    <a href="https://renome.zeabur.app" class="qr__url">renome.zeabur.app</a>
+
+    <div class="qr__sep"></div>
+
+    <div class="qr__info">
+      str. Calea Ie&#537;ilor 57, B&#259;l&#539;i &middot; ул. Каля Ешилор 57<br>
+      10:00 &mdash; 01:00
     </div>
 
-    <!-- Link fallback -->
-    <div class="qr-link">
-      <div class="qr-link__or">
-        <span class="qr-link__or-line"></span>
-        <span class="qr-link__or-text">sau / или</span>
-        <span class="qr-link__or-line"></span>
-      </div>
-      <div class="qr-link__hint">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        Introdu &#238;n browser / Введи в браузере
-      </div>
-      <a href="https://renome.zeabur.app">
-        renome.zeabur.app
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-    </div>
-
-    <!-- Footer -->
-    <div class="qr-footer">
-      <div class="qr-footer__icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      </div>
-      <div class="qr-footer__address">
-        str. Calea Ie&#537;ilor 57, B&#259;l&#539;i<br>
-        <strong>&#1091;&#1083;. &#1050;&#1072;&#1083;&#1103; &#1045;&#1096;&#1080;&#1083;&#1086;&#1088; 57, &#1041;&#1101;&#1083;&#1094;&#1100;</strong><br>
-        Zilnic / &#1045;&#1078;&#1077;&#1076;&#1085;&#1077;&#1074;&#1085;&#1086;: 10:00 &mdash; 01:00
-      </div>
-    </div>
-
-    <!-- Print -->
-    <div class="qr-print">
-      <button class="qr-print__btn" onclick="window.print()">
+    <div class="qr__print">
+      <button class="qr__print-btn" onclick="window.print()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        Printeaz&#259; / &#1056;&#1072;&#1089;&#1087;&#1077;&#1095;&#1072;&#1090;&#1072;&#1090;&#1100;
+        Print
       </button>
     </div>
-
   </div>
 </body>
 </html>
