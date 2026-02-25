@@ -2,6 +2,7 @@
   const L = lang === 'ru' ? {
     online: 'Онлайн',
     connecting: 'Подключение...',
+    reconnecting: 'Переподключение...',
     logout: 'Выйти',
     ordersToday: 'заказов сегодня',
     revenue: 'выручка',
@@ -14,10 +15,32 @@
     total: 'Итого',
     enableNotif: 'Включите уведомления, чтобы не пропустить заказы',
     enable: 'Включить',
-    later: 'Позже'
+    later: 'Позже',
+    newOrder: 'Новый заказ',
+    statusNew: 'Новый',
+    statusConfirmed: 'Принят',
+    statusCompleted: 'Завершён',
+    statusCancelled: 'Отменён',
+    accept: 'Принять',
+    complete: 'Завершить',
+    cancel: 'Отменить',
+    edit: 'Изменить',
+    save: 'Сохранить',
+    close: 'Закрыть',
+    cancelOrder: 'Отмена заказа',
+    cancelReason: 'Причина отмены (необязательно)',
+    confirmCancel: 'Подтвердить отмену',
+    editOrder: 'Редактировать заказ',
+    name: 'Имя',
+    phone: 'Телефон',
+    address: 'Адрес',
+    comment: 'Комментарий',
+    items: 'Позиции',
+    reason: 'Причина'
   } : {
     online: 'Online',
     connecting: 'Conectare...',
+    reconnecting: 'Reconectare...',
     logout: 'Ieșire',
     ordersToday: 'comenzi azi',
     revenue: 'venit',
@@ -30,7 +53,35 @@
     total: 'Total',
     enableNotif: 'Activați notificările pentru a nu rata comenzile',
     enable: 'Activați',
-    later: 'Mai târziu'
+    later: 'Mai târziu',
+    newOrder: 'Comandă nouă',
+    statusNew: 'Nou',
+    statusConfirmed: 'Confirmat',
+    statusCompleted: 'Finalizat',
+    statusCancelled: 'Anulat',
+    accept: 'Acceptă',
+    complete: 'Finalizează',
+    cancel: 'Anulează',
+    edit: 'Editează',
+    save: 'Salvează',
+    close: 'Închide',
+    cancelOrder: 'Anulare comandă',
+    cancelReason: 'Motivul anulării (opțional)',
+    confirmCancel: 'Confirmă anularea',
+    editOrder: 'Editare comandă',
+    name: 'Nume',
+    phone: 'Telefon',
+    address: 'Adresă',
+    comment: 'Comentariu',
+    items: 'Poziții',
+    reason: 'Motiv'
+  };
+
+  const statusLabels = {
+    'new': L.statusNew,
+    'confirmed': L.statusConfirmed,
+    'completed': L.statusCompleted,
+    'cancelled': L.statusCancelled
   };
 %>
 <!DOCTYPE html>
@@ -100,9 +151,13 @@
     <% } %>
 
     <% orders.forEach(order => { %>
-      <div class="staff-order-card" data-order-id="<%= order.id %>">
+      <% const st = order.status || 'new'; %>
+      <div class="staff-order-card<%= st === 'completed' ? ' staff-order-card--completed' : '' %><%= st === 'cancelled' ? ' staff-order-card--cancelled' : '' %>" data-order-id="<%= order.id %>" data-status="<%= st %>">
         <div class="staff-order-card__header">
-          <span class="staff-order-card__id">#<%= order.id %></span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="staff-order-card__id">#<%= order.id %></span>
+            <span class="staff-status-badge staff-status-badge--<%= st %>"><%= statusLabels[st] || st %></span>
+          </div>
           <span class="staff-order-card__time"><%= new Date(order.created_at).toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'}) %></span>
         </div>
 
@@ -134,7 +189,7 @@
 
         <div class="staff-order-card__items">
           <% order.items.forEach(item => { %>
-            <div class="staff-item-row">
+            <div class="staff-item-row" data-item-id="<%= item.id %>">
               <span class="staff-item-row__qty"><%= item.quantity %>x</span>
               <span class="staff-item-row__name"><%= item.name %></span>
               <span class="staff-item-row__price"><%= item.price * item.quantity %> MDL</span>
@@ -146,6 +201,22 @@
           <div class="staff-order-card__comment">"<%= order.comment %>"</div>
         <% } %>
 
+        <% if (st === 'cancelled' && order.cancel_reason) { %>
+          <div class="staff-order-card__cancel-reason"><%= L.reason %>: <%= order.cancel_reason %></div>
+        <% } %>
+
+        <% if (st === 'new' || st === 'confirmed') { %>
+          <div class="staff-actions">
+            <% if (st === 'new') { %>
+              <button class="staff-action-btn staff-action-btn--accept" onclick="staffActions.accept(<%= order.id %>)"><%= L.accept %></button>
+            <% } else { %>
+              <button class="staff-action-btn staff-action-btn--complete" onclick="staffActions.complete(<%= order.id %>)"><%= L.complete %></button>
+            <% } %>
+            <button class="staff-action-btn staff-action-btn--cancel" onclick="staffActions.openCancel(<%= order.id %>)"><%= L.cancel %></button>
+            <button class="staff-action-btn staff-action-btn--edit" onclick="staffActions.openEdit(<%= order.id %>)"><%= L.edit %></button>
+          </div>
+        <% } %>
+
         <div class="staff-order-card__total">
           <span><%= L.total %></span>
           <span><%= order.total %> MDL</span>
@@ -154,6 +225,54 @@
     <% }) %>
 
   </main>
+
+  <!-- Cancel Modal -->
+  <div class="staff-modal" id="cancelModal">
+    <div class="staff-modal__overlay" onclick="staffActions.closeCancel()"></div>
+    <div class="staff-modal__sheet">
+      <div class="staff-modal__title"><%= L.cancelOrder %></div>
+      <div class="staff-modal__field">
+        <label class="staff-modal__label"><%= L.cancelReason %></label>
+        <textarea class="staff-modal__input" id="cancelReason" rows="3"></textarea>
+      </div>
+      <div class="staff-modal__actions">
+        <button class="staff-modal__btn staff-modal__btn--secondary" onclick="staffActions.closeCancel()"><%= L.close %></button>
+        <button class="staff-modal__btn staff-modal__btn--danger" id="confirmCancelBtn"><%= L.confirmCancel %></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="staff-modal" id="editModal">
+    <div class="staff-modal__overlay" onclick="staffActions.closeEdit()"></div>
+    <div class="staff-modal__sheet">
+      <div class="staff-modal__title"><%= L.editOrder %> <span id="editOrderId"></span></div>
+      <div class="staff-modal__field">
+        <label class="staff-modal__label"><%= L.name %></label>
+        <input type="text" class="staff-modal__input" id="editName">
+      </div>
+      <div class="staff-modal__field">
+        <label class="staff-modal__label"><%= L.phone %></label>
+        <input type="tel" class="staff-modal__input" id="editPhone">
+      </div>
+      <div class="staff-modal__field">
+        <label class="staff-modal__label"><%= L.address %></label>
+        <input type="text" class="staff-modal__input" id="editAddress">
+      </div>
+      <div class="staff-modal__field">
+        <label class="staff-modal__label"><%= L.comment %></label>
+        <textarea class="staff-modal__input" id="editComment" rows="2"></textarea>
+      </div>
+      <div class="staff-edit-items">
+        <div class="staff-edit-items__title"><%= L.items %></div>
+        <div id="editItemsList"></div>
+      </div>
+      <div class="staff-modal__actions">
+        <button class="staff-modal__btn staff-modal__btn--secondary" onclick="staffActions.closeEdit()"><%= L.close %></button>
+        <button class="staff-modal__btn staff-modal__btn--primary" id="saveEditBtn"><%= L.save %></button>
+      </div>
+    </div>
+  </div>
 
   <!-- Notification permission banner -->
   <div class="staff-notify-banner" id="notifyBanner" style="display:none">
@@ -164,6 +283,7 @@
 
   <script>
     window.STAFF_LANG = '<%= lang %>';
+    window.STAFF_T = <%- JSON.stringify(L) %>;
   </script>
   <script src="/js/staff.js"></script>
 </body>

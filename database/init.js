@@ -98,6 +98,11 @@ if (columnExists('orders', 'customer_address') && !columnExists('orders', 'deliv
   db.exec('ALTER TABLE orders RENAME COLUMN customer_address TO delivery_address');
 }
 
+// Order management columns
+if (!columnExists('orders', 'status'))        db.exec("ALTER TABLE orders ADD COLUMN status TEXT DEFAULT 'new'");
+if (!columnExists('orders', 'cancel_reason')) db.exec('ALTER TABLE orders ADD COLUMN cancel_reason TEXT');
+if (!columnExists('orders', 'updated_at'))    db.exec('ALTER TABLE orders ADD COLUMN updated_at DATETIME');
+
 // ============================================================
 // SEED ADMIN USER
 // ============================================================

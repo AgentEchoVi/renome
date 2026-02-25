@@ -3,27 +3,15 @@
 
   // === Translations ===
   var lang = window.STAFF_LANG || 'ro';
-  var T = lang === 'ru' ? {
-    connected: 'Онлайн',
-    reconnecting: 'Переподключение...',
-    disconnected: 'Офлайн',
-    delivery: 'Доставка',
-    pickup: 'Самовывоз',
-    cash: 'Наличные',
-    card: 'Карта',
-    total: 'Итого',
-    newOrder: 'Новый заказ'
-  } : {
-    connected: 'Online',
-    reconnecting: 'Reconectare...',
-    disconnected: 'Offline',
-    delivery: 'Livrare',
-    pickup: 'Ridicare',
-    cash: 'Numerar',
-    card: 'Card',
-    total: 'Total',
-    newOrder: 'Comandă nouă'
-  };
+  var T = window.STAFF_T || {};
+
+  var statusNames = lang === 'ru'
+    ? { 'new': 'Новый', confirmed: 'Принят', completed: 'Завершён', cancelled: 'Отменён' }
+    : { 'new': 'Nou', confirmed: 'Confirmat', completed: 'Finalizat', cancelled: 'Anulat' };
+
+  var sseTexts = lang === 'ru'
+    ? { connected: 'Онлайн', reconnecting: 'Переподключение...' }
+    : { connected: 'Online', reconnecting: 'Reconectare...' };
 
   // === DOM refs ===
   var statusDot = document.querySelector('.staff-status__dot');
@@ -36,48 +24,52 @@
   var enableBtn = document.getElementById('enableNotifyBtn');
   var dismissBtn = document.getElementById('dismissNotifyBtn');
 
+  // Store orders data for edit modal
+  var ordersCache = {};
+  // Initialize from server-rendered cards
+  document.querySelectorAll('.staff-order-card').forEach(function(card) {
+    var oid = card.getAttribute('data-order-id');
+    if (oid) ordersCache[oid] = null; // placeholder
+  });
+
   // === SSE Connection ===
   var evtSource = null;
 
   function setStatus(state) {
     if (statusDot) statusDot.className = 'staff-status__dot staff-status__dot--' + state;
-    if (statusText) {
-      statusText.textContent = T[state] || state;
-    }
+    if (statusText) statusText.textContent = sseTexts[state] || state;
   }
 
   function connectSSE() {
     if (evtSource) evtSource.close();
     evtSource = new EventSource('/staff/events');
 
-    evtSource.addEventListener('connected', function() {
-      setStatus('connected');
-    });
+    evtSource.addEventListener('connected', function() { setStatus('connected'); });
 
     evtSource.addEventListener('new-order', function(e) {
       try {
         var order = JSON.parse(e.data);
+        order.status = order.status || 'new';
+        ordersCache[order.id] = order;
         handleNewOrder(order);
-      } catch (err) {
-        console.error('SSE parse error:', err);
-      }
+      } catch (err) { console.error('SSE parse:', err); }
     });
 
-    evtSource.onopen = function() {
-      setStatus('connected');
-    };
+    evtSource.addEventListener('order-update', function(e) {
+      try {
+        var order = JSON.parse(e.data);
+        ordersCache[order.id] = order;
+        handleOrderUpdate(order);
+      } catch (err) { console.error('SSE parse:', err); }
+    });
 
-    evtSource.onerror = function() {
-      setStatus('reconnecting');
-    };
+    evtSource.onopen = function() { setStatus('connected'); };
+    evtSource.onerror = function() { setStatus('reconnecting'); };
   }
 
   // === Handle New Order ===
   function handleNewOrder(order) {
-    if (emptyState) {
-      emptyState.remove();
-      emptyState = null;
-    }
+    if (emptyState) { emptyState.remove(); emptyState = null; }
 
     var html = buildOrderCard(order);
     container.insertAdjacentHTML('afterbegin', html);
@@ -85,43 +77,61 @@
     var newCard = container.firstElementChild;
     if (newCard) {
       newCard.classList.add('staff-order-card--new');
-      setTimeout(function() {
-        newCard.classList.remove('staff-order-card--new');
-      }, 2000);
+      setTimeout(function() { newCard.classList.remove('staff-order-card--new'); }, 2000);
     }
 
-    updateStats(order);
+    updateStatsAdd(order);
     playNotificationSound();
-
-    if (navigator.vibrate) {
-      navigator.vibrate([200, 100, 200]);
-    }
-
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
     showBrowserNotification(order);
   }
 
+  // === Handle Order Update (SSE) ===
+  function handleOrderUpdate(order) {
+    var existing = container.querySelector('[data-order-id="' + order.id + '"]');
+    if (!existing) return;
+
+    var html = buildOrderCard(order);
+    var temp = document.createElement('div');
+    temp.innerHTML = html;
+    var newCard = temp.firstElementChild;
+    existing.replaceWith(newCard);
+  }
+
+  // === Build Order Card ===
   function buildOrderCard(order) {
     var items = order.items || [];
+    var st = order.status || 'new';
     var itemsHtml = '';
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
-      itemsHtml += '<div class="staff-item-row">' +
+      itemsHtml += '<div class="staff-item-row" data-item-id="' + it.id + '">' +
         '<span class="staff-item-row__qty">' + it.quantity + 'x</span>' +
         '<span class="staff-item-row__name">' + esc(it.name) + '</span>' +
         '<span class="staff-item-row__price">' + (it.price * it.quantity) + ' MDL</span>' +
         '</div>';
     }
 
-    var typeLabel = order.delivery_type === 'delivery' ? T.delivery : T.pickup;
-    var payLabel = order.payment_method === 'cash' ? T.cash : T.card;
+    var typeLabel = order.delivery_type === 'delivery' ? (T.delivery || 'Livrare') : (T.pickup || 'Ridicare');
+    var payLabel = order.payment_method === 'cash' ? (T.cash || 'Numerar') : (T.card || 'Card');
     var time = new Date(order.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
 
-    var h = '<div class="staff-order-card" data-order-id="' + order.id + '">';
+    var cardClass = 'staff-order-card';
+    if (st === 'completed') cardClass += ' staff-order-card--completed';
+    if (st === 'cancelled') cardClass += ' staff-order-card--cancelled';
+
+    var h = '<div class="' + cardClass + '" data-order-id="' + order.id + '" data-status="' + st + '">';
+
+    // Header with status badge
     h += '<div class="staff-order-card__header">';
+    h += '<div style="display:flex;align-items:center;gap:8px">';
     h += '<span class="staff-order-card__id">#' + order.id + '</span>';
+    h += '<span class="staff-status-badge staff-status-badge--' + st + '">' + (statusNames[st] || st) + '</span>';
+    h += '</div>';
     h += '<span class="staff-order-card__time">' + time + '</span>';
     h += '</div>';
 
+    // Customer
     h += '<div class="staff-order-card__customer">';
     h += '<div>';
     h += '<div class="staff-order-card__name">' + esc(order.customer_name) + '</div>';
@@ -132,11 +142,13 @@
     h += '<a href="tel:' + esc(order.customer_phone) + '" class="staff-order-card__phone">' + esc(order.customer_phone) + '</a>';
     h += '</div>';
 
+    // Type badges
     h += '<div class="staff-order-card__type">';
     h += '<span class="staff-badge staff-badge--' + order.delivery_type + '">' + typeLabel + '</span>';
     h += '<span class="staff-badge staff-badge--payment">' + payLabel + '</span>';
     h += '</div>';
 
+    // Address
     if (order.delivery_address) {
       h += '<div class="staff-order-card__address">';
       h += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
@@ -144,13 +156,34 @@
       h += '</div>';
     }
 
+    // Items
     h += '<div class="staff-order-card__items">' + itemsHtml + '</div>';
 
+    // Comment
     if (order.comment) {
       h += '<div class="staff-order-card__comment">"' + esc(order.comment) + '"</div>';
     }
 
-    h += '<div class="staff-order-card__total"><span>' + T.total + '</span><span>' + order.total + ' MDL</span></div>';
+    // Cancel reason
+    if (st === 'cancelled' && order.cancel_reason) {
+      h += '<div class="staff-order-card__cancel-reason">' + (T.reason || 'Motiv') + ': ' + esc(order.cancel_reason) + '</div>';
+    }
+
+    // Action buttons
+    if (st === 'new' || st === 'confirmed') {
+      h += '<div class="staff-actions">';
+      if (st === 'new') {
+        h += '<button class="staff-action-btn staff-action-btn--accept" onclick="staffActions.accept(' + order.id + ')">' + (T.accept || 'Acceptă') + '</button>';
+      } else {
+        h += '<button class="staff-action-btn staff-action-btn--complete" onclick="staffActions.complete(' + order.id + ')">' + (T.complete || 'Finalizează') + '</button>';
+      }
+      h += '<button class="staff-action-btn staff-action-btn--cancel" onclick="staffActions.openCancel(' + order.id + ')">' + (T.cancel || 'Anulează') + '</button>';
+      h += '<button class="staff-action-btn staff-action-btn--edit" onclick="staffActions.openEdit(' + order.id + ')">' + (T.edit || 'Editează') + '</button>';
+      h += '</div>';
+    }
+
+    // Total
+    h += '<div class="staff-order-card__total"><span>' + (T.total || 'Total') + '</span><span>' + order.total + ' MDL</span></div>';
     h += '</div>';
     return h;
   }
@@ -162,7 +195,7 @@
     return d.innerHTML;
   }
 
-  function updateStats(order) {
+  function updateStatsAdd(order) {
     if (orderCountEl) {
       var count = parseInt(orderCountEl.textContent) || 0;
       orderCountEl.textContent = count + 1;
@@ -173,6 +206,152 @@
       orderTotalEl.textContent = (total + order.total) + ' MDL';
     }
   }
+
+  // === API helpers ===
+  function getCsrf() {
+    var m = document.cookie.match(/(?:^|;\s*)_csrf=([^;]*)/);
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+
+  function apiPost(url, data) {
+    return fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCsrf() },
+      body: JSON.stringify(data)
+    }).then(function(r) { return r.json(); });
+  }
+
+  // === Actions (global for onclick) ===
+  var cancelOrderId = null;
+  var editOrderId = null;
+
+  window.staffActions = {
+    accept: function(id) {
+      apiPost('/staff/orders/' + id + '/status', { status: 'confirmed' });
+    },
+
+    complete: function(id) {
+      apiPost('/staff/orders/' + id + '/status', { status: 'completed' });
+    },
+
+    openCancel: function(id) {
+      cancelOrderId = id;
+      document.getElementById('cancelReason').value = '';
+      document.getElementById('cancelModal').classList.add('staff-modal--open');
+    },
+
+    closeCancel: function() {
+      cancelOrderId = null;
+      document.getElementById('cancelModal').classList.remove('staff-modal--open');
+    },
+
+    openEdit: function(id) {
+      editOrderId = id;
+      var order = ordersCache[id];
+
+      // If not in cache, read from DOM
+      if (!order) {
+        var card = container.querySelector('[data-order-id="' + id + '"]');
+        if (!card) return;
+        // Fetch fresh data
+        fetch('/staff/orders/' + id + '/status', { method: 'GET' }).catch(function() {});
+        // Populate from DOM as fallback
+        document.getElementById('editName').value = card.querySelector('.staff-order-card__name')?.textContent || '';
+        document.getElementById('editPhone').value = card.querySelector('.staff-order-card__phone')?.textContent || '';
+        var addrEl = card.querySelector('.staff-order-card__address');
+        document.getElementById('editAddress').value = addrEl ? addrEl.textContent.trim() : '';
+        var commentEl = card.querySelector('.staff-order-card__comment');
+        document.getElementById('editComment').value = commentEl ? commentEl.textContent.replace(/^"|"$/g, '') : '';
+        document.getElementById('editItemsList').innerHTML = '<div style="color:var(--s-text2);font-size:13px;padding:8px 0">...</div>';
+        document.getElementById('editOrderId').textContent = '#' + id;
+        document.getElementById('editModal').classList.add('staff-modal--open');
+        return;
+      }
+
+      document.getElementById('editOrderId').textContent = '#' + id;
+      document.getElementById('editName').value = order.customer_name || '';
+      document.getElementById('editPhone').value = order.customer_phone || '';
+      document.getElementById('editAddress').value = order.delivery_address || '';
+      document.getElementById('editComment').value = order.comment || '';
+
+      // Build items list
+      var itemsHtml = '';
+      var items = order.items || [];
+      for (var i = 0; i < items.length; i++) {
+        var it = items[i];
+        itemsHtml += '<div class="staff-edit-item" data-item-id="' + it.id + '" data-price="' + it.price + '">';
+        itemsHtml += '<span class="staff-edit-item__name">' + esc(it.name) + '</span>';
+        itemsHtml += '<span class="staff-edit-item__price">' + it.price + ' MDL</span>';
+        itemsHtml += '<div class="staff-qty-controls">';
+        itemsHtml += '<button class="staff-qty-btn staff-qty-btn--remove" onclick="staffActions.qtyChange(this,-1)">−</button>';
+        itemsHtml += '<span class="staff-qty-value">' + it.quantity + '</span>';
+        itemsHtml += '<button class="staff-qty-btn" onclick="staffActions.qtyChange(this,1)">+</button>';
+        itemsHtml += '</div>';
+        itemsHtml += '</div>';
+      }
+      document.getElementById('editItemsList').innerHTML = itemsHtml;
+      document.getElementById('editModal').classList.add('staff-modal--open');
+    },
+
+    closeEdit: function() {
+      editOrderId = null;
+      document.getElementById('editModal').classList.remove('staff-modal--open');
+    },
+
+    qtyChange: function(btn, delta) {
+      var row = btn.closest('.staff-edit-item');
+      var valEl = row.querySelector('.staff-qty-value');
+      var val = parseInt(valEl.textContent) || 0;
+      val = Math.max(0, val + delta);
+      valEl.textContent = val;
+      if (val === 0) {
+        row.style.opacity = '0.3';
+        row.style.textDecoration = 'line-through';
+      } else {
+        row.style.opacity = '1';
+        row.style.textDecoration = 'none';
+      }
+    }
+  };
+
+  // Cancel confirm button
+  document.getElementById('confirmCancelBtn').addEventListener('click', function() {
+    if (!cancelOrderId) return;
+    var reason = document.getElementById('cancelReason').value.trim();
+    apiPost('/staff/orders/' + cancelOrderId + '/status', {
+      status: 'cancelled',
+      cancel_reason: reason || null
+    });
+    window.staffActions.closeCancel();
+  });
+
+  // Save edit button
+  document.getElementById('saveEditBtn').addEventListener('click', function() {
+    if (!editOrderId) return;
+
+    // Save customer info
+    apiPost('/staff/orders/' + editOrderId + '/customer', {
+      customer_name: document.getElementById('editName').value.trim(),
+      customer_phone: document.getElementById('editPhone').value.trim(),
+      delivery_address: document.getElementById('editAddress').value.trim(),
+      comment: document.getElementById('editComment').value.trim()
+    });
+
+    // Save items changes
+    var itemRows = document.querySelectorAll('#editItemsList .staff-edit-item');
+    var itemChanges = [];
+    itemRows.forEach(function(row) {
+      var itemId = parseInt(row.getAttribute('data-item-id'));
+      var qty = parseInt(row.querySelector('.staff-qty-value').textContent) || 0;
+      itemChanges.push({ id: itemId, quantity: qty });
+    });
+
+    if (itemChanges.length > 0) {
+      apiPost('/staff/orders/' + editOrderId + '/items', { items: itemChanges });
+    }
+
+    window.staffActions.closeEdit();
+  });
 
   // === Audio — Web Audio API ===
   var audioCtx = null;
@@ -212,18 +391,14 @@
     var body = order.customer_name + ' · ' + order.total + ' MDL\n' + items;
 
     try {
-      var n = new Notification(T.newOrder + ' #' + order.id, {
+      var n = new Notification((T.newOrder || 'Comandă nouă') + ' #' + order.id, {
         body: body,
         icon: '/img/logo.png',
         badge: '/img/logo.png',
         tag: 'order-' + order.id,
         requireInteraction: true
       });
-
-      n.onclick = function() {
-        window.focus();
-        n.close();
-      };
+      n.onclick = function() { window.focus(); n.close(); };
     } catch (e) { /* notification failed */ }
   }
 
