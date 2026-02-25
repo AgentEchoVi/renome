@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Menu &mdash; Renome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f7f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .qr-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 48px 40px;
+      text-align: center;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
+    }
+
+    .qr-card__logo {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      display: block;
+    }
+
+    .qr-card__name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .qr-card__subtitle {
+      font-size: 13px;
+      color: #888;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .qr-card__code {
+      background: #fff;
+      border: 2px solid #2d5a27;
+      border-radius: 16px;
+      padding: 16px;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+
+    .qr-card__code img {
+      display: block;
+      width: 220px;
+      height: 220px;
+    }
+
+    .qr-card__cta {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+
+    .qr-card__desc {
+      font-size: 13px;
+      color: #999;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .qr-card__divider {
+      width: 40px;
+      height: 2px;
+      background: #2d5a27;
+      margin: 0 auto 20px;
+      border-radius: 2px;
+    }
+
+    .qr-card__address {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    .qr-card__wifi {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .qr-card__wifi strong {
+      color: #1a1a1a;
+    }
+
+    .qr-print {
+      margin-top: 24px;
+    }
+
+    .qr-print__btn {
+      display: inline-block;
+      padding: 12px 32px;
+      background: #2d5a27;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+
+    .qr-print__btn:hover {
+      background: #1e3d1a;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      .qr-card {
+        box-shadow: none;
+        border: none;
+        padding: 32px 24px;
+        max-width: 100%;
+      }
+      .qr-print {
+        display: none;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .qr-card {
+        padding: 32px 24px;
+        border-radius: 16px;
+      }
+      .qr-card__name {
+        font-size: 24px;
+      }
+      .qr-card__code img {
+        width: 180px;
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="qr-card">
+    <img src="/img/logo-clean.png" alt="Renome" class="qr-card__logo">
+    <div class="qr-card__name">Renome</div>
+    <div class="qr-card__subtitle">Italian Caf&eacute;</div>
+
+    <div class="qr-card__code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=440x440&data=https://renome.zeabur.app&color=2d5a27&bgcolor=ffffff" alt="QR Code">
+    </div>
+
+    <div class="qr-card__cta">Scaneaz&#259; meniul</div>
+    <div class="qr-card__desc">
+      Deschide camera telefonului &#537;i scaneaz&#259; codul QR<br>
+      pentru a vedea meniul &#537;i a comanda online
+    </div>
+
+    <div class="qr-card__divider"></div>
+    <div class="qr-card__address">
+      str. Calea Ie&#537;ilor 57, B&#259;l&#539;i<br>
+      Zilnic: 10:00 &mdash; 01:00
+    </div>
+
+    <div class="qr-print">
+      <button class="qr-print__btn" onclick="window.print()">Printeaz&#259; QR</button>
+    </div>
+  </div>
+</body>
+</html>

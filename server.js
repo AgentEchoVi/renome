@@ -60,6 +60,10 @@ app.get('/account', isAuth, (req, res) => {
   res.render('pages/account', { user, orders });
 });
 
+app.get('/qr', (req, res) => {
+  res.render('pages/qr');
+});
+
 app.use((req, res) => {
   res.status(404).render('pages/404');
 });
