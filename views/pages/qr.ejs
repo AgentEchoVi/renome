@@ -120,6 +120,26 @@
       line-height: 1.6;
     }
 
+    .qr-card__link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    .qr-card__link a {
+      color: #2d5a27;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(45,90,39,0.3);
+      transition: border-color 0.2s;
+    }
+
+    .qr-card__link a:hover {
+      border-bottom-color: #2d5a27;
+    }
+
     .qr-card__wifi {
       margin-top: 20px;
       padding-top: 16px;
@@ -207,6 +227,11 @@
     <div class="qr-card__desc">
       Открой камеру телефона и отсканируй QR-код,<br>
       чтобы посмотреть меню и заказать онлайн
+    </div>
+
+    <div class="qr-card__link">
+      Nu poți scana? / Не получается сканировать?<br>
+      <a href="https://renome.zeabur.app">renome.zeabur.app</a>
     </div>
 
     <div class="qr-card__divider"></div>
