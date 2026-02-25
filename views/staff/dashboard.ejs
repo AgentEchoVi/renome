@@ -36,7 +36,11 @@
     address: 'Адрес',
     comment: 'Комментарий',
     items: 'Позиции',
-    reason: 'Причина'
+    reason: 'Причина',
+    history: 'История',
+    historyStatus: 'Статус изменён',
+    historyItems: 'Позиции изменены',
+    historyCustomer: 'Данные клиента изменены'
   } : {
     online: 'Online',
     connecting: 'Conectare...',
@@ -74,7 +78,11 @@
     address: 'Adresă',
     comment: 'Comentariu',
     items: 'Poziții',
-    reason: 'Motiv'
+    reason: 'Motiv',
+    history: 'Istoric',
+    historyStatus: 'Status schimbat',
+    historyItems: 'Poziții modificate',
+    historyCustomer: 'Date client modificate'
   };
 
   const statusLabels = {
@@ -99,7 +107,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/staff.css?v=2">
+  <link rel="stylesheet" href="/css/staff.css?v=3">
 </head>
 <body class="staff-body">
 
@@ -205,6 +213,38 @@
           <div class="staff-order-card__cancel-reason"><%= L.reason %>: <%= order.cancel_reason %></div>
         <% } %>
 
+        <% if (order.history && order.history.length > 0) { %>
+          <div class="staff-history">
+            <button class="staff-history__toggle" onclick="staffActions.toggleHistory(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <%= L.history %> (<%= order.history.length %>)
+              <svg class="staff-history__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="staff-history__timeline" style="display:none">
+              <% order.history.forEach(h => { %>
+                <div class="staff-history__entry staff-history__entry--<%= h.action %>">
+                  <div class="staff-history__dot"></div>
+                  <div class="staff-history__content">
+                    <div class="staff-history__action">
+                      <% if (h.action === 'status_change') { %>
+                        <% const d = JSON.parse(h.details); %>
+                        <%= L.historyStatus %>: <%= statusLabels[d.from] || d.from %> &rarr; <%= statusLabels[d.to] || d.to %>
+                      <% } else if (h.action === 'item_edit') { %>
+                        <%= L.historyItems %>
+                      <% } else if (h.action === 'customer_edit') { %>
+                        <%= L.historyCustomer %>
+                      <% } %>
+                    </div>
+                    <div class="staff-history__meta">
+                      <%= h.staff_name %> &middot; <%= new Date(h.created_at).toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'}) %>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+
         <% if (st === 'new' || st === 'confirmed') { %>
           <div class="staff-actions">
             <% if (st === 'new') { %>
@@ -285,6 +325,6 @@
     window.STAFF_LANG = '<%= lang %>';
     window.STAFF_T = <%- JSON.stringify(L) %>;
   </script>
-  <script src="/js/staff.js?v=2"></script>
+  <script src="/js/staff.js?v=3"></script>
 </body>
 </html>

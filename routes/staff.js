@@ -5,11 +5,18 @@ const db = require('../database/init');
 const { isStaff } = require('../middleware/auth');
 const orderEmitter = require('../lib/orderEvents');
 
-// Helper: load full order with items
+// Helper: history
+const insertHistory = db.prepare(
+  'INSERT INTO order_history (order_id, action, details, staff_name) VALUES (?, ?, ?, ?)'
+);
+const stmtHistory = db.prepare('SELECT * FROM order_history WHERE order_id = ? ORDER BY created_at ASC');
+
+// Helper: load full order with items + history
 function getFullOrder(orderId) {
   const order = db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId);
   if (!order) return null;
   order.items = db.prepare('SELECT * FROM order_items WHERE order_id = ?').all(orderId);
+  order.history = stmtHistory.all(orderId);
   return order;
 }
 
@@ -21,13 +28,15 @@ router.get('/login', (req, res) => {
   res.render('staff/login', { error: req.query.error || null });
 });
 
-// POST /staff/login
+// POST /staff/login — password only
 router.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  const hash = crypto.createHash('sha256').update(password || '').digest('hex');
-  const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+  const { password } = req.body;
+  if (!password) return res.redirect('/staff/login?error=invalid');
 
-  if (!user || user.password !== hash || (user.role !== 'staff' && user.role !== 'admin')) {
+  const hash = crypto.createHash('sha256').update(password).digest('hex');
+  const user = db.prepare("SELECT * FROM users WHERE password = ? AND (role = 'staff' OR role = 'admin')").get(hash);
+
+  if (!user) {
     return res.redirect('/staff/login?error=invalid');
   }
 
@@ -53,6 +62,7 @@ router.get('/', isStaff, (req, res) => {
   const stmtItems = db.prepare('SELECT * FROM order_items WHERE order_id = ?');
   orders.forEach(order => {
     order.items = stmtItems.all(order.id);
+    order.history = stmtHistory.all(order.id);
   });
 
   res.render('staff/dashboard', { orders });
@@ -82,6 +92,12 @@ router.post('/orders/:id/status', isStaff, (req, res) => {
       .run(status, order.id);
   }
 
+  insertHistory.run(
+    order.id, 'status_change',
+    JSON.stringify({ from: order.status, to: status, cancel_reason: cancel_reason || null }),
+    req.session.user.name
+  );
+
   const fullOrder = getFullOrder(order.id);
   orderEmitter.emit('order-update', fullOrder);
   res.json({ success: true, order: fullOrder });
@@ -97,6 +113,9 @@ router.post('/orders/:id/items', isStaff, (req, res) => {
     return res.status(400).json({ error: 'Cannot edit finished order' });
   }
   if (!Array.isArray(items)) return res.status(400).json({ error: 'Items required' });
+
+  const oldItems = db.prepare('SELECT * FROM order_items WHERE order_id = ?').all(order.id);
+  const oldTotal = order.total;
 
   const updateQty = db.prepare('UPDATE order_items SET quantity = ? WHERE id = ? AND order_id = ?');
   const deleteItem = db.prepare('DELETE FROM order_items WHERE id = ? AND order_id = ?');
@@ -118,6 +137,26 @@ router.post('/orders/:id/items', isStaff, (req, res) => {
 
   editItems();
 
+  // Log item changes
+  const changes = [];
+  for (const item of items) {
+    const old = oldItems.find(o => o.id === item.id);
+    if (!old) continue;
+    if (item.quantity <= 0) {
+      changes.push({ name: old.name, from: old.quantity, to: 0, removed: true });
+    } else if (item.quantity !== old.quantity) {
+      changes.push({ name: old.name, from: old.quantity, to: item.quantity });
+    }
+  }
+  if (changes.length > 0) {
+    const newTotal = db.prepare('SELECT total FROM orders WHERE id = ?').get(order.id).total;
+    insertHistory.run(
+      order.id, 'item_edit',
+      JSON.stringify({ changes, old_total: oldTotal, new_total: newTotal }),
+      req.session.user.name
+    );
+  }
+
   const fullOrder = getFullOrder(order.id);
   orderEmitter.emit('order-update', fullOrder);
   res.json({ success: true, order: fullOrder });
@@ -133,16 +172,30 @@ router.post('/orders/:id/customer', isStaff, (req, res) => {
     return res.status(400).json({ error: 'Cannot edit finished order' });
   }
 
+  const newName = customer_name || order.customer_name;
+  const newPhone = customer_phone || order.customer_phone;
+  const newAddress = delivery_address !== undefined ? delivery_address : order.delivery_address;
+  const newComment = comment !== undefined ? comment : order.comment;
+
   db.prepare(`
     UPDATE orders SET customer_name = ?, customer_phone = ?, delivery_address = ?, comment = ?, updated_at = CURRENT_TIMESTAMP
     WHERE id = ?
-  `).run(
-    customer_name || order.customer_name,
-    customer_phone || order.customer_phone,
-    delivery_address !== undefined ? delivery_address : order.delivery_address,
-    comment !== undefined ? comment : order.comment,
-    order.id
-  );
+  `).run(newName, newPhone, newAddress, newComment, order.id);
+
+  // Log customer changes
+  const customerChanges = {};
+  if (newName !== order.customer_name) customerChanges.customer_name = { from: order.customer_name, to: newName };
+  if (newPhone !== order.customer_phone) customerChanges.customer_phone = { from: order.customer_phone, to: newPhone };
+  if (newAddress !== order.delivery_address) customerChanges.delivery_address = { from: order.delivery_address, to: newAddress };
+  if (newComment !== order.comment) customerChanges.comment = { from: order.comment, to: newComment };
+
+  if (Object.keys(customerChanges).length > 0) {
+    insertHistory.run(
+      order.id, 'customer_edit',
+      JSON.stringify(customerChanges),
+      req.session.user.name
+    );
+  }
 
   const fullOrder = getFullOrder(order.id);
   orderEmitter.emit('order-update', fullOrder);

@@ -169,6 +169,37 @@
       h += '<div class="staff-order-card__cancel-reason">' + (T.reason || 'Motiv') + ': ' + esc(order.cancel_reason) + '</div>';
     }
 
+    // History
+    if (order.history && order.history.length > 0) {
+      h += '<div class="staff-history">';
+      h += '<button class="staff-history__toggle" onclick="staffActions.toggleHistory(this)">';
+      h += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+      h += (T.history || 'Istoric') + ' (' + order.history.length + ')';
+      h += '<svg class="staff-history__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+      h += '</button>';
+      h += '<div class="staff-history__timeline" style="display:none">';
+      for (var hi = 0; hi < order.history.length; hi++) {
+        var entry = order.history[hi];
+        var entryTime = new Date(entry.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        h += '<div class="staff-history__entry staff-history__entry--' + entry.action + '">';
+        h += '<div class="staff-history__dot"></div>';
+        h += '<div class="staff-history__content">';
+        h += '<div class="staff-history__action">';
+        if (entry.action === 'status_change') {
+          var d = typeof entry.details === 'string' ? JSON.parse(entry.details) : entry.details;
+          h += (T.historyStatus || 'Status schimbat') + ': ' + (statusNames[d.from] || d.from) + ' &rarr; ' + (statusNames[d.to] || d.to);
+        } else if (entry.action === 'item_edit') {
+          h += (T.historyItems || 'Poziții modificate');
+        } else if (entry.action === 'customer_edit') {
+          h += (T.historyCustomer || 'Date client modificate');
+        }
+        h += '</div>';
+        h += '<div class="staff-history__meta">' + esc(entry.staff_name) + ' &middot; ' + entryTime + '</div>';
+        h += '</div></div>';
+      }
+      h += '</div></div>';
+    }
+
     // Action buttons
     if (st === 'new' || st === 'confirmed') {
       h += '<div class="staff-actions">';
@@ -296,6 +327,18 @@
     closeEdit: function() {
       editOrderId = null;
       document.getElementById('editModal').classList.remove('staff-modal--open');
+    },
+
+    toggleHistory: function(btn) {
+      var timeline = btn.nextElementSibling;
+      var chevron = btn.querySelector('.staff-history__chevron');
+      if (timeline.style.display === 'none') {
+        timeline.style.display = 'block';
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+      } else {
+        timeline.style.display = 'none';
+        if (chevron) chevron.style.transform = 'rotate(0)';
+      }
     },
 
     qtyChange: function(btn, delta) {

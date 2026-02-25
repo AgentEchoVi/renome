@@ -1,14 +1,12 @@
 <%
   const L = lang === 'ru' ? {
     subtitle: 'Панель персонала',
-    error: 'Неверный email или пароль',
-    emailPh: 'Email',
+    error: 'Неверный пароль',
     passwordPh: 'Пароль',
     login: 'Войти'
   } : {
     subtitle: 'Panoul personalului',
-    error: 'Email sau parolă incorectă',
-    emailPh: 'Email',
+    error: 'Parolă incorectă',
     passwordPh: 'Parola',
     login: 'Autentificare'
   };
@@ -28,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/staff.css">
+  <link rel="stylesheet" href="/css/staff.css?v=3">
 </head>
 <body class="staff-login-body">
   <div class="staff-login">
@@ -46,10 +44,8 @@
 
       <form method="POST" action="/staff/login" class="staff-form">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <input type="email" name="email" class="staff-input" required
-          placeholder="<%= L.emailPh %>" autocomplete="email" inputmode="email">
         <input type="password" name="password" class="staff-input" required
-          placeholder="<%= L.passwordPh %>" autocomplete="current-password">
+          placeholder="<%= L.passwordPh %>" autocomplete="current-password" autofocus>
         <button type="submit" class="staff-btn"><%= L.login %></button>
       </form>
     </div>

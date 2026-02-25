@@ -935,6 +935,131 @@ textarea.staff-modal__input {
 }
 
 /* ============================================================
+   HISTORY TIMELINE
+   ============================================================ */
+
+.staff-history {
+  margin-top: 10px;
+  border-top: 1px solid var(--s-card-border);
+  padding-top: 8px;
+}
+
+.staff-history__toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--s-text2);
+  font-family: var(--s-font);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 0;
+  width: 100%;
+  min-height: 44px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.staff-history__toggle:active {
+  opacity: 0.7;
+}
+
+.staff-history__chevron {
+  margin-left: auto;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.staff-history__timeline {
+  padding: 8px 0 4px 0;
+}
+
+.staff-history__entry {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  position: relative;
+}
+
+.staff-history__entry:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 18px;
+  bottom: -6px;
+  width: 1px;
+  background: var(--s-card-border);
+}
+
+.staff-history__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+  background: var(--s-text3);
+  border: 2px solid var(--s-card);
+}
+
+.staff-history__entry--status_change .staff-history__dot {
+  background: var(--s-blue);
+}
+
+.staff-history__entry--item_edit .staff-history__dot {
+  background: var(--s-amber);
+}
+
+.staff-history__entry--customer_edit .staff-history__dot {
+  background: var(--s-green);
+}
+
+.staff-history__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.staff-history__action {
+  font-size: 13px;
+  color: var(--s-text);
+  line-height: 1.3;
+}
+
+.staff-history__meta {
+  font-size: 11px;
+  color: var(--s-text3);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   TOUCH TARGETS & MOBILE POLISH
+   ============================================================ */
+
+.staff-action-btn {
+  min-height: 44px;
+}
+
+.staff-qty-btn {
+  width: 36px;
+  height: 36px;
+}
+
+.staff-topbar__logout {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.staff-lang__btn {
+  min-width: 36px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 
@@ -957,6 +1082,75 @@ textarea.staff-modal__input {
 
   .staff-stats__value {
     font-size: 18px;
+  }
+
+  .staff-topbar {
+    padding: 0 10px;
+    gap: 6px;
+  }
+
+  .staff-topbar__right {
+    gap: 8px;
+  }
+
+  .staff-topbar__logo {
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+
+  .staff-topbar__label {
+    display: none;
+  }
+
+  .staff-status__text {
+    display: none;
+  }
+
+  .staff-topbar__logout {
+    font-size: 12px;
+  }
+
+  .staff-history__action {
+    font-size: 12px;
+  }
+
+  .staff-history__meta {
+    font-size: 10px;
+  }
+
+  .staff-login__card {
+    padding: 32px 20px;
+  }
+
+  .staff-login__logo {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .staff-modal__sheet {
+    max-height: 90vh;
+    max-height: 90dvh;
+    border-radius: 12px 12px 0 0;
+    padding: 20px 16px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .staff-modal__title {
+    font-size: 16px;
+  }
+
+  .staff-modal__input {
+    font-size: 16px;
+  }
+
+  .staff-modal__btn {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .staff-edit-item__name {
+    font-size: 13px;
   }
 }
 
