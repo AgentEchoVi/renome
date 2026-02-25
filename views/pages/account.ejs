@@ -63,7 +63,6 @@
                 <th><%= t.account.orderId %></th>
                 <th><%= t.account.date %></th>
                 <th><%= t.account.total %></th>
-                <th><%= t.account.status %></th>
               </tr>
             </thead>
             <tbody>
@@ -72,7 +71,6 @@
                   <td class="account-table__id">#<%= order.id %></td>
                   <td><%= new Date(order.created_at).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'ro-MD') %></td>
                   <td class="account-table__total"><%= order.total %> MDL</td>
-                  <td><span class="badge badge--<%= order.status %>"><%= order.status %></span></td>
                 </tr>
               <% }) %>
             </tbody>

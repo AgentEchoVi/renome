@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
   const itemCount = db.prepare('SELECT COUNT(*) as cnt FROM menu_items').get().cnt;
   const orderCount = db.prepare('SELECT COUNT(*) as cnt FROM orders').get().cnt;
   const todayOrders = db.prepare("SELECT COUNT(*) as cnt FROM orders WHERE DATE(created_at) = DATE('now')").get().cnt;
-  const revenue = db.prepare("SELECT COALESCE(SUM(total),0) as total FROM orders WHERE status != 'cancelled'").get().total;
+  const revenue = db.prepare("SELECT COALESCE(SUM(total),0) as total FROM orders").get().total;
   const recentOrders = db.prepare('SELECT * FROM orders ORDER BY created_at DESC LIMIT 10').all();
   res.render('admin/dashboard', { stats: { itemCount, orderCount, todayOrders, revenue }, recentOrders });
 });
@@ -94,11 +94,8 @@ router.get('/users', (req, res) => {
 
 // Orders
 router.get('/orders', (req, res) => {
-  const status = req.query.status || '';
-  const orders = status
-    ? db.prepare('SELECT * FROM orders WHERE status = ? ORDER BY created_at DESC').all(status)
-    : db.prepare('SELECT * FROM orders ORDER BY created_at DESC').all();
-  res.render('admin/orders', { orders, currentStatus: status });
+  const orders = db.prepare('SELECT * FROM orders ORDER BY created_at DESC').all();
+  res.render('admin/orders', { orders });
 });
 
 router.get('/orders/:id', (req, res) => {
@@ -106,15 +103,6 @@ router.get('/orders/:id', (req, res) => {
   if (!order) return res.redirect('/admin/orders');
   const items = db.prepare('SELECT * FROM order_items WHERE order_id = ?').all(order.id);
   res.render('admin/order-detail', { order, items });
-});
-
-router.post('/orders/:id/status', (req, res) => {
-  const { status } = req.body;
-  const valid = ['new', 'confirmed', 'cooking', 'delivery', 'completed', 'cancelled'];
-  if (valid.includes(status)) {
-    db.prepare('UPDATE orders SET status = ? WHERE id = ?').run(status, req.params.id);
-  }
-  res.redirect('back');
 });
 
 module.exports = router;

@@ -25,14 +25,6 @@
   <main class="admin-main">
     <div class="admin-main__header">
       <h1 class="admin-main__title">Заказы</h1>
-      <div class="admin-filters">
-        <a href="/admin/orders" class="admin-filter-btn <%= !currentStatus ? 'admin-filter-btn--active' : '' %>">Все</a>
-        <a href="/admin/orders?status=new" class="admin-filter-btn <%= currentStatus === 'new' ? 'admin-filter-btn--active' : '' %>">Новые</a>
-        <a href="/admin/orders?status=confirmed" class="admin-filter-btn <%= currentStatus === 'confirmed' ? 'admin-filter-btn--active' : '' %>">Подтверждённые</a>
-        <a href="/admin/orders?status=cooking" class="admin-filter-btn <%= currentStatus === 'cooking' ? 'admin-filter-btn--active' : '' %>">Готовится</a>
-        <a href="/admin/orders?status=delivery" class="admin-filter-btn <%= currentStatus === 'delivery' ? 'admin-filter-btn--active' : '' %>">Доставка</a>
-        <a href="/admin/orders?status=completed" class="admin-filter-btn <%= currentStatus === 'completed' ? 'admin-filter-btn--active' : '' %>">Завершённые</a>
-      </div>
     </div>
 
     <div class="admin-table-wrap">
@@ -44,7 +36,6 @@
             <th>Телефон</th>
             <th>Тип</th>
             <th>Сумма</th>
-            <th>Статус</th>
             <th>Дата</th>
             <th></th>
           </tr>
@@ -57,13 +48,12 @@
               <td><%= o.customer_phone %></td>
               <td><%= o.delivery_type === 'delivery' ? 'Доставка' : 'Самовывоз' %></td>
               <td class="admin-table__price"><%= o.total %> MDL</td>
-              <td><span class="badge badge--<%= o.status %>"><%= o.status %></span></td>
               <td class="admin-table__date"><%= new Date(o.created_at).toLocaleString('ru-RU') %></td>
               <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm btn--outline">Детали</a></td>
             </tr>
           <% }) %>
           <% if (orders.length === 0) { %>
-            <tr><td colspan="8" class="admin-table__empty">Заказы не найдены</td></tr>
+            <tr><td colspan="7" class="admin-table__empty">Заказы не найдены</td></tr>
           <% } %>
         </tbody>
       </table>

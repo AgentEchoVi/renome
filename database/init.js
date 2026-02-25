@@ -61,7 +61,6 @@ db.exec(`
     delivery_address TEXT,
     delivery_type TEXT DEFAULT 'delivery',
     total REAL DEFAULT 0,
-    status TEXT DEFAULT 'new',
     payment_method TEXT DEFAULT 'cash',
     comment TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

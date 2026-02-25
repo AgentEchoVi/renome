@@ -58,7 +58,6 @@
             <th>Клиент</th>
             <th>Телефон</th>
             <th>Сумма</th>
-            <th>Статус</th>
             <th>Дата</th>
           </tr>
         </thead>
@@ -69,12 +68,11 @@
               <td><%= o.customer_name %></td>
               <td><%= o.customer_phone %></td>
               <td class="admin-table__price"><%= o.total %> MDL</td>
-              <td><span class="badge badge--<%= o.status %>"><%= o.status %></span></td>
               <td class="admin-table__date"><%= new Date(o.created_at).toLocaleDateString('ru-RU') %></td>
             </tr>
           <% }) %>
           <% if (recentOrders.length === 0) { %>
-            <tr><td colspan="6" class="admin-table__empty">Заказов пока нет</td></tr>
+            <tr><td colspan="5" class="admin-table__empty">Заказов пока нет</td></tr>
           <% } %>
         </tbody>
       </table>

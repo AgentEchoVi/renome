@@ -3679,36 +3679,6 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--accent);
 }
 
-.badge--confirmed {
-  background: rgba(59, 130, 246, 0.08);
-  color: #3B82F6;
-}
-
-.badge--cooking {
-  background: rgba(245, 158, 11, 0.08);
-  color: #F59E0B;
-}
-
-.badge--delivery {
-  background: rgba(139, 92, 246, 0.08);
-  color: #8B5CF6;
-}
-
-.badge--completed {
-  background: rgba(45, 138, 78, 0.08);
-  color: var(--green);
-}
-
-.badge--cancelled {
-  background: rgba(214, 69, 69, 0.08);
-  color: var(--red);
-}
-
-.badge--pending {
-  background: rgba(245, 158, 11, 0.08);
-  color: #D97706;
-}
-
 /* ==========================================================
    28. ANIMATIONS
    ========================================================== */
@@ -5003,11 +4973,6 @@ h1, h2, h3, h4, h5, h6 {
   .admin-detail-grid {
     grid-template-columns: 1fr;
   }
-  .admin-status-form {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   /* Menu grid 2 columns on tablet */
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -6268,47 +6233,6 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #a33030;
 }
 
-/* --- Badge styles --- */
-.badge {
-  display: inline-block;
-  padding: 4px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-radius: 50px;
-}
-
-.badge--new {
-  background: rgba(43, 94, 63, 0.1);
-  color: var(--accent);
-}
-
-.badge--confirmed {
-  background: rgba(65, 132, 199, 0.1);
-  color: #4184c7;
-}
-
-.badge--cooking {
-  background: rgba(199, 153, 63, 0.1);
-  color: #c7993f;
-}
-
-.badge--delivery {
-  background: rgba(63, 146, 199, 0.1);
-  color: #3f92c7;
-}
-
-.badge--completed {
-  background: rgba(76, 145, 65, 0.1);
-  color: var(--green);
-}
-
-.badge--cancelled {
-  background: rgba(214, 69, 69, 0.1);
-  color: var(--red);
-}
-
 /* --- Admin Topbar (NOT sidebar) --- */
 .admin-body {
   display: flex;
@@ -6633,23 +6557,6 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14px;
   text-align: right;
   max-width: 60%;
-}
-
-.admin-detail-status {
-  margin-bottom: 20px;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.admin-status-form {
-  display: flex;
-  gap: 12px;
-  align-items: flex-end;
-}
-
-.admin-status-form .form-group {
-  flex: 1;
-  margin-bottom: 0;
 }
 
 /* Admin Form Card */

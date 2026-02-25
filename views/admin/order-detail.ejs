@@ -75,26 +75,6 @@
         </dl>
       </div>
 
-      <!-- Status update -->
-      <div class="admin-detail-card">
-        <h3 class="admin-detail-card__title">Статус заказа</h3>
-        <p class="admin-detail-status">
-          Текущий: <span class="badge badge--<%= order.status %>"><%= order.status %></span>
-        </p>
-        <form method="POST" action="/admin/orders/<%= order.id %>/status?_csrf=<%= csrfToken %>" class="admin-status-form">
-          <div class="form-group">
-            <select name="status" class="form-select">
-              <option value="new" <%= order.status === 'new' ? 'selected' : '' %>>Новый</option>
-              <option value="confirmed" <%= order.status === 'confirmed' ? 'selected' : '' %>>Подтверждён</option>
-              <option value="cooking" <%= order.status === 'cooking' ? 'selected' : '' %>>Готовится</option>
-              <option value="delivery" <%= order.status === 'delivery' ? 'selected' : '' %>>В доставке</option>
-              <option value="completed" <%= order.status === 'completed' ? 'selected' : '' %>>Завершён</option>
-              <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Отменён</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn--primary">Обновить статус</button>
-        </form>
-      </div>
     </div>
 
     <!-- Order items table -->

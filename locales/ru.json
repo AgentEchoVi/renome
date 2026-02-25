@@ -138,8 +138,7 @@
     "orderNow": "Заказать сейчас",
     "orderId": "#",
     "date": "Дата",
-    "total": "Итого",
-    "status": "Статус"
+    "total": "Итого"
   },
   "orderSuccess": {
     "pageTitle": "Заказ оформлен",
