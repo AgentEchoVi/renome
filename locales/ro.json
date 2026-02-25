@@ -194,6 +194,15 @@
   "toast": {
     "addedToCart": "adăugat în coș!"
   },
+  "qr": {
+    "pageTitle": "QR Menu",
+    "subtitle": "Italian Café",
+    "cta": "Scanează meniul",
+    "desc": "Deschide camera telefonului și scanează codul QR pentru a vedea meniul și a comanda online",
+    "address": "str. Calea Ieșilor 57, Bălți",
+    "schedule": "Zilnic: 10:00 — 01:00",
+    "print": "Printează QR"
+  },
   "meta": {
     "homeTitle": "Renome — Cafenea Italiană | Bălți, Moldova",
     "homeDesc": "Renome — cafenea italiană în Bălți, Moldova. Pizza, paste, risotto, antipasti și deserturi. Comandă online cu livrare rapidă."

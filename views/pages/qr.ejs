@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="<%= lang %>">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Menu &mdash; Renome</title>
+  <title><%= t.qr.pageTitle %> &mdash; Renome</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -169,26 +169,23 @@
   <div class="qr-card">
     <img src="/img/logo-clean.png" alt="Renome" class="qr-card__logo">
     <div class="qr-card__name">Renome</div>
-    <div class="qr-card__subtitle">Italian Caf&eacute;</div>
+    <div class="qr-card__subtitle"><%= t.qr.subtitle %></div>
 
     <div class="qr-card__code">
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=440x440&data=https://renome.zeabur.app&color=2d5a27&bgcolor=ffffff" alt="QR Code">
     </div>
 
-    <div class="qr-card__cta">Scaneaz&#259; meniul</div>
-    <div class="qr-card__desc">
-      Deschide camera telefonului &#537;i scaneaz&#259; codul QR<br>
-      pentru a vedea meniul &#537;i a comanda online
-    </div>
+    <div class="qr-card__cta"><%= t.qr.cta %></div>
+    <div class="qr-card__desc"><%= t.qr.desc %></div>
 
     <div class="qr-card__divider"></div>
     <div class="qr-card__address">
-      str. Calea Ie&#537;ilor 57, B&#259;l&#539;i<br>
-      Zilnic: 10:00 &mdash; 01:00
+      <%= t.qr.address %><br>
+      <%= t.qr.schedule %>
     </div>
 
     <div class="qr-print">
-      <button class="qr-print__btn" onclick="window.print()">Printeaz&#259; QR</button>
+      <button class="qr-print__btn" onclick="window.print()"><%= t.qr.print %></button>
     </div>
   </div>
 </body>
