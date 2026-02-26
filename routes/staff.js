@@ -243,7 +243,19 @@ router.post('/register-push', isStaff, (req, res) => {
   db.prepare('INSERT OR REPLACE INTO push_tokens (user_id, token) VALUES (?, ?)')
     .run(req.session.user.id, token);
 
+  console.log('Push token registered for user', req.session.user.name, ':', token.substring(0, 20) + '...');
   res.json({ success: true });
+});
+
+// GET /staff/push-status — debug: check Firebase + tokens
+router.get('/push-status', isStaff, (req, res) => {
+  const admin = require('firebase-admin');
+  const tokens = db.prepare('SELECT id, user_id, token, created_at FROM push_tokens').all();
+  res.json({
+    firebaseInitialized: admin.apps.length > 0,
+    tokenCount: tokens.length,
+    tokens: tokens.map(t => ({ id: t.id, user_id: t.user_id, token: t.token.substring(0, 20) + '...', created_at: t.created_at }))
+  });
 });
 
 // POST /staff/unregister-push — remove FCM token (logout)
