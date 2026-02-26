@@ -235,15 +235,16 @@ router.get('/events', isStaff, (req, res) => {
   });
 });
 
-// POST /staff/register-push — save FCM token
+// POST /staff/register-push — save FCM token with lang
 router.post('/register-push', isStaff, (req, res) => {
-  const { token } = req.body;
+  const { token, lang } = req.body;
   if (!token) return res.status(400).json({ error: 'Token required' });
+  const userLang = (lang === 'ru') ? 'ru' : 'ro';
 
-  db.prepare('INSERT OR REPLACE INTO push_tokens (user_id, token) VALUES (?, ?)')
-    .run(req.session.user.id, token);
+  db.prepare('INSERT OR REPLACE INTO push_tokens (user_id, token, lang) VALUES (?, ?, ?)')
+    .run(req.session.user.id, token, userLang);
 
-  console.log('Push token registered for user', req.session.user.name, ':', token.substring(0, 20) + '...');
+  console.log('Push token registered for user', req.session.user.name, '(lang=' + userLang + '):', token.substring(0, 20) + '...');
   res.json({ success: true });
 });
 

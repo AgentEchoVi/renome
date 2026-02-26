@@ -92,6 +92,7 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     token TEXT NOT NULL UNIQUE,
+    lang TEXT DEFAULT 'ro',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
   );
@@ -110,6 +111,7 @@ if (!columnExists('orders', 'customer_email'))    db.exec('ALTER TABLE orders AD
 if (!columnExists('orders', 'delivery_address'))  db.exec('ALTER TABLE orders ADD COLUMN delivery_address TEXT');
 if (!columnExists('orders', 'delivery_type'))     db.exec('ALTER TABLE orders ADD COLUMN delivery_type TEXT DEFAULT \'delivery\'');
 if (!columnExists('order_items', 'name'))         db.exec('ALTER TABLE order_items ADD COLUMN name TEXT');
+if (!columnExists('push_tokens', 'lang'))         db.exec("ALTER TABLE push_tokens ADD COLUMN lang TEXT DEFAULT 'ro'");
 
 // Rename old column if exists (customer_address → delivery_address)
 if (columnExists('orders', 'customer_address') && !columnExists('orders', 'delivery_address')) {

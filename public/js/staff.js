@@ -437,13 +437,13 @@
       if (notifyBanner) notifyBanner.style.display = 'none';
     }).catch(function() {});
 
-    // Get FCM token and send to server
+    // Get FCM token and send to server with language
     capPush.addListener('registration', function(token) {
       console.log('FCM token:', token.value);
       fetch('/staff/register-push', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCsrf() },
-        body: JSON.stringify({ token: token.value })
+        body: JSON.stringify({ token: token.value, lang: lang })
       }).catch(function() {});
     });
 

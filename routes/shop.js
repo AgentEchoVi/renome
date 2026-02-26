@@ -132,11 +132,14 @@ router.post('/checkout', (req, res) => {
     fullOrder.items = resolvedItems;
     orderEmitter.emit('new-order', fullOrder);
 
-    // Send FCM push to staff phones
+    // Send localized FCM push to staff phones
     const itemsList = resolvedItems.map(i => i.quantity + 'x ' + i.name).join(', ');
+    const pushBody = fullOrder.customer_name + ' · ' + fullOrder.total + ' MDL\n' + itemsList;
     sendPushToStaff(
-      'Comandă nouă #' + orderId,
-      fullOrder.customer_name + ' · ' + fullOrder.total + ' MDL\n' + itemsList,
+      {
+        ro: { title: 'Comandă nouă #' + orderId, body: pushBody },
+        ru: { title: 'Новый заказ #' + orderId, body: pushBody }
+      },
       { orderId: String(orderId) }
     );
   }
