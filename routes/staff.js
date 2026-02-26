@@ -235,4 +235,24 @@ router.get('/events', isStaff, (req, res) => {
   });
 });
 
+// POST /staff/register-push — save FCM token
+router.post('/register-push', isStaff, (req, res) => {
+  const { token } = req.body;
+  if (!token) return res.status(400).json({ error: 'Token required' });
+
+  db.prepare('INSERT OR REPLACE INTO push_tokens (user_id, token) VALUES (?, ?)')
+    .run(req.session.user.id, token);
+
+  res.json({ success: true });
+});
+
+// POST /staff/unregister-push — remove FCM token (logout)
+router.post('/unregister-push', isStaff, (req, res) => {
+  const { token } = req.body;
+  if (token) {
+    db.prepare('DELETE FROM push_tokens WHERE token = ?').run(token);
+  }
+  res.json({ success: true });
+});
+
 module.exports = router;

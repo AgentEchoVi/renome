@@ -425,15 +425,42 @@
 
   // === Capacitor detection ===
   var isCapacitor = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
-  var capNotifications = isCapacitor && window.Capacitor.Plugins ? window.Capacitor.Plugins.LocalNotifications : null;
-  var notifPermissionGranted = false;
+  var capPush = isCapacitor && window.Capacitor.Plugins ? window.Capacitor.Plugins.PushNotifications : null;
+  var capLocal = isCapacitor && window.Capacitor.Plugins ? window.Capacitor.Plugins.LocalNotifications : null;
 
-  // Request native notification permission on Capacitor
-  if (capNotifications) {
-    capNotifications.requestPermissions().then(function(result) {
-      notifPermissionGranted = (result.display === 'granted');
+  // Register for FCM push notifications (Capacitor)
+  if (capPush) {
+    capPush.requestPermissions().then(function(result) {
+      if (result.receive === 'granted') {
+        capPush.register();
+      }
       if (notifyBanner) notifyBanner.style.display = 'none';
     }).catch(function() {});
+
+    // Get FCM token and send to server
+    capPush.addListener('registration', function(token) {
+      console.log('FCM token:', token.value);
+      fetch('/staff/register-push', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCsrf() },
+        body: JSON.stringify({ token: token.value })
+      }).catch(function() {});
+    });
+
+    capPush.addListener('registrationError', function(err) {
+      console.error('FCM registration error:', err);
+    });
+
+    // When push received while app is open — just play sound (SSE handles UI update)
+    capPush.addListener('pushNotificationReceived', function(notification) {
+      playNotificationSound();
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    });
+
+    // When user taps push notification — focus the app
+    capPush.addListener('pushNotificationActionPerformed', function() {
+      window.focus();
+    });
   }
 
   // === Browser Notifications ===
@@ -445,9 +472,9 @@
     var body = order.customer_name + ' · ' + order.total + ' MDL\n' + items;
     var title = (T.newOrder || 'Comandă nouă') + ' #' + order.id;
 
-    // Native notifications via Capacitor
-    if (capNotifications) {
-      capNotifications.schedule({
+    // In Capacitor — FCM handles background push, use local for foreground
+    if (capLocal && !capPush) {
+      capLocal.schedule({
         notifications: [{
           title: title,
           body: body,
@@ -455,9 +482,12 @@
           smallIcon: 'ic_launcher',
           largeIcon: 'ic_launcher'
         }]
-      }).catch(function(e) { console.log('Native notification error:', e); });
+      }).catch(function() {});
       return;
     }
+
+    // On Capacitor with FCM — push comes from server, skip client-side notification
+    if (isCapacitor) return;
 
     // Web Notifications fallback (desktop/PWA)
     if (!('Notification' in window) || Notification.permission !== 'granted') return;
@@ -481,12 +511,7 @@
 
   if (enableBtn) {
     enableBtn.addEventListener('click', function() {
-      if (isCapacitor && capNotifications) {
-        capNotifications.requestPermissions().then(function(result) {
-          notifPermissionGranted = (result.display === 'granted');
-          if (notifyBanner) notifyBanner.style.display = 'none';
-        });
-      } else if ('Notification' in window) {
+      if ('Notification' in window) {
         Notification.requestPermission().then(function() {
           if (notifyBanner) notifyBanner.style.display = 'none';
         });

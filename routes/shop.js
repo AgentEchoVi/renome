@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database/init');
 const orderEmitter = require('../lib/orderEvents');
+const { sendPushToStaff } = require('../lib/firebase');
 
 // Helper: get localized field from DB row
 function L(item, field, lang) {
@@ -130,6 +131,14 @@ router.post('/checkout', (req, res) => {
   if (fullOrder) {
     fullOrder.items = resolvedItems;
     orderEmitter.emit('new-order', fullOrder);
+
+    // Send FCM push to staff phones
+    const itemsList = resolvedItems.map(i => i.quantity + 'x ' + i.name).join(', ');
+    sendPushToStaff(
+      'Comandă nouă #' + orderId,
+      fullOrder.customer_name + ' · ' + fullOrder.total + ' MDL\n' + itemsList,
+      { orderId: String(orderId) }
+    );
   }
 
   res.json({ success: true, orderId });
