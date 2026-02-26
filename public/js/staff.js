@@ -423,18 +423,47 @@
     osc.stop(t + duration);
   }
 
+  // === Capacitor detection ===
+  var isCapacitor = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  var capNotifications = isCapacitor && window.Capacitor.Plugins ? window.Capacitor.Plugins.LocalNotifications : null;
+  var notifPermissionGranted = false;
+
+  // Request native notification permission on Capacitor
+  if (capNotifications) {
+    capNotifications.requestPermissions().then(function(result) {
+      notifPermissionGranted = (result.display === 'granted');
+      if (notifyBanner) notifyBanner.style.display = 'none';
+    }).catch(function() {});
+  }
+
   // === Browser Notifications ===
   function showBrowserNotification(order) {
-    if (!('Notification' in window) || Notification.permission !== 'granted') return;
-
     var items = (order.items || []).map(function(i) {
       return i.quantity + 'x ' + i.name;
     }).join(', ');
 
     var body = order.customer_name + ' · ' + order.total + ' MDL\n' + items;
+    var title = (T.newOrder || 'Comandă nouă') + ' #' + order.id;
+
+    // Native notifications via Capacitor
+    if (capNotifications) {
+      capNotifications.schedule({
+        notifications: [{
+          title: title,
+          body: body,
+          id: order.id,
+          smallIcon: 'ic_launcher',
+          largeIcon: 'ic_launcher'
+        }]
+      }).catch(function(e) { console.log('Native notification error:', e); });
+      return;
+    }
+
+    // Web Notifications fallback (desktop/PWA)
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
 
     try {
-      var n = new Notification((T.newOrder || 'Comandă nouă') + ' #' + order.id, {
+      var n = new Notification(title, {
         body: body,
         icon: '/img/logo.png',
         badge: '/img/logo.png',
@@ -446,15 +475,22 @@
   }
 
   // === Notification Permission Banner ===
-  if ('Notification' in window && Notification.permission === 'default') {
+  if (!isCapacitor && 'Notification' in window && Notification.permission === 'default') {
     if (notifyBanner) notifyBanner.style.display = 'flex';
   }
 
   if (enableBtn) {
     enableBtn.addEventListener('click', function() {
-      Notification.requestPermission().then(function() {
-        if (notifyBanner) notifyBanner.style.display = 'none';
-      });
+      if (isCapacitor && capNotifications) {
+        capNotifications.requestPermissions().then(function(result) {
+          notifPermissionGranted = (result.display === 'granted');
+          if (notifyBanner) notifyBanner.style.display = 'none';
+        });
+      } else if ('Notification' in window) {
+        Notification.requestPermission().then(function() {
+          if (notifyBanner) notifyBanner.style.display = 'none';
+        });
+      }
     });
   }
 
