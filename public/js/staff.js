@@ -40,11 +40,16 @@
     if (statusText) statusText.textContent = sseTexts[state] || state;
   }
 
+  var sseRetries = 0;
+
   function connectSSE() {
     if (evtSource) evtSource.close();
     evtSource = new EventSource('/staff/events');
 
-    evtSource.addEventListener('connected', function() { setStatus('connected'); });
+    evtSource.addEventListener('connected', function() {
+      sseRetries = 0;
+      setStatus('connected');
+    });
 
     evtSource.addEventListener('new-order', function(e) {
       try {
@@ -63,8 +68,31 @@
       } catch (err) { console.error('SSE parse:', err); }
     });
 
-    evtSource.onopen = function() { setStatus('connected'); };
-    evtSource.onerror = function() { setStatus('reconnecting'); };
+    evtSource.onopen = function() {
+      sseRetries = 0;
+      setStatus('connected');
+    };
+
+    evtSource.onerror = function() {
+      sseRetries++;
+      setStatus('reconnecting');
+      // After 3 failed retries, check if session expired
+      if (sseRetries >= 3) {
+        evtSource.close();
+        fetch('/staff/push-status').then(function(r) {
+          if (r.redirected || r.url.indexOf('/login') !== -1 || r.status === 401) {
+            window.location.href = '/staff/login';
+          } else {
+            // Server is up, just SSE hiccup — retry after delay
+            sseRetries = 0;
+            setTimeout(connectSSE, 5000);
+          }
+        }).catch(function() {
+          // Network error — retry later
+          setTimeout(connectSSE, 10000);
+        });
+      }
+    };
   }
 
   // === Handle New Order ===
