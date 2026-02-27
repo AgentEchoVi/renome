@@ -286,11 +286,21 @@
 
   window.staffActions = {
     accept: function(id) {
-      apiPost('/staff/orders/' + id + '/status', { status: 'confirmed' });
+      apiPost('/staff/orders/' + id + '/status', { status: 'confirmed' }).then(function(res) {
+        if (res.success && res.order) {
+          ordersCache[id] = res.order;
+          handleOrderUpdate(res.order);
+        }
+      });
     },
 
     complete: function(id) {
-      apiPost('/staff/orders/' + id + '/status', { status: 'completed' });
+      apiPost('/staff/orders/' + id + '/status', { status: 'completed' }).then(function(res) {
+        if (res.success && res.order) {
+          ordersCache[id] = res.order;
+          handleOrderUpdate(res.order);
+        }
+      });
     },
 
     openCancel: function(id) {
@@ -388,10 +398,16 @@
   // Cancel confirm button
   document.getElementById('confirmCancelBtn').addEventListener('click', function() {
     if (!cancelOrderId) return;
+    var id = cancelOrderId;
     var reason = document.getElementById('cancelReason').value.trim();
-    apiPost('/staff/orders/' + cancelOrderId + '/status', {
+    apiPost('/staff/orders/' + id + '/status', {
       status: 'cancelled',
       cancel_reason: reason || null
+    }).then(function(res) {
+      if (res.success && res.order) {
+        ordersCache[id] = res.order;
+        handleOrderUpdate(res.order);
+      }
     });
     window.staffActions.closeCancel();
   });
@@ -400,12 +416,19 @@
   document.getElementById('saveEditBtn').addEventListener('click', function() {
     if (!editOrderId) return;
 
+    var id = editOrderId;
+
     // Save customer info
-    apiPost('/staff/orders/' + editOrderId + '/customer', {
+    apiPost('/staff/orders/' + id + '/customer', {
       customer_name: document.getElementById('editName').value.trim(),
       customer_phone: document.getElementById('editPhone').value.trim(),
       delivery_address: document.getElementById('editAddress').value.trim(),
       comment: document.getElementById('editComment').value.trim()
+    }).then(function(res) {
+      if (res.success && res.order) {
+        ordersCache[id] = res.order;
+        handleOrderUpdate(res.order);
+      }
     });
 
     // Save items changes
@@ -418,7 +441,12 @@
     });
 
     if (itemChanges.length > 0) {
-      apiPost('/staff/orders/' + editOrderId + '/items', { items: itemChanges });
+      apiPost('/staff/orders/' + id + '/items', { items: itemChanges }).then(function(res) {
+        if (res.success && res.order) {
+          ordersCache[id] = res.order;
+          handleOrderUpdate(res.order);
+        }
+      });
     }
 
     window.staffActions.closeEdit();

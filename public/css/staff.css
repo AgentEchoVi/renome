@@ -1156,12 +1156,77 @@ textarea.staff-modal__input {
 
 @media (min-width: 768px) {
   .staff-orders {
-    max-width: 600px;
+    max-width: 900px;
     margin: 0 auto;
     width: 100%;
+    padding: 20px 24px;
   }
 
   .staff-login__card {
     padding: 48px 40px;
+  }
+
+  .staff-topbar {
+    padding: 0 24px;
+  }
+
+  .staff-stats {
+    padding: 14px 24px;
+  }
+
+  .staff-modal {
+    align-items: center;
+  }
+
+  .staff-modal__sheet {
+    border-radius: 16px;
+    max-width: 520px;
+    max-height: 80vh;
+    animation: sheetFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes sheetFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+}
+
+@media (min-width: 1100px) {
+  .staff-orders {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    align-content: start;
+  }
+
+  .staff-empty {
+    grid-column: 1 / -1;
+  }
+
+  .staff-order-card {
+    margin: 0;
+  }
+
+  .staff-topbar {
+    padding: 0 32px;
+  }
+
+  .staff-stats {
+    padding: 14px 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .staff-stats {
+    border-bottom: 1px solid var(--s-card-border);
+  }
+}
+
+@media (min-width: 1500px) {
+  .staff-orders {
+    max-width: 1500px;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
