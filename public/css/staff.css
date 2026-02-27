@@ -1179,6 +1179,172 @@ textarea.staff-modal__input {
   }
 }
 
+/* ============================================================
+   DEV FOOTER & CONTACT CARD (staff pages)
+   ============================================================ */
+
+.staff-dev-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 11px;
+  color: var(--s-text3);
+  letter-spacing: 0.3px;
+  z-index: 50;
+}
+
+.staff-dev-footer a {
+  color: var(--s-text2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.staff-dev-footer a:first-of-type {
+  border-bottom: 1px dotted var(--s-text3);
+}
+
+.staff-dev-footer a:hover {
+  color: var(--s-accent);
+}
+
+.dev-card {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.dev-card--open {
+  display: flex;
+}
+
+.dev-card__sheet {
+  position: relative;
+  background: var(--s-card, #1a1a1a);
+  border: 1px solid var(--s-card-border, #2a2a2a);
+  border-radius: 20px;
+  padding: 36px 32px 28px;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;
+  animation: devCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes devCardIn {
+  from { opacity: 0; transform: scale(0.9) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.dev-card__close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--s-text3, #555);
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.dev-card__close:hover {
+  color: var(--s-text, #f0f0f0);
+}
+
+.dev-card__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--s-accent, #b8914a) 0%, #8b6914 100%);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  letter-spacing: 1px;
+}
+
+.dev-card__name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--s-text, #f0f0f0);
+  margin-bottom: 2px;
+}
+
+.dev-card__role {
+  font-size: 13px;
+  color: var(--s-text2, #8a8a8a);
+  margin-bottom: 8px;
+}
+
+.dev-card__phone {
+  margin-bottom: 20px;
+}
+
+.dev-card__phone a {
+  color: var(--s-text2, #8a8a8a);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.dev-card__links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dev-card__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-family: var(--s-font, 'Inter', sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.dev-card__link:active {
+  transform: scale(0.97);
+}
+
+.dev-card__link--viber {
+  background: linear-gradient(135deg, #7360f2 0%, #59267c 100%);
+}
+
+.dev-card__link--whatsapp {
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+}
+
+.dev-card__link--telegram {
+  background: linear-gradient(135deg, #2aabee 0%, #229ed9 100%);
+}
+
+.dev-card__link:hover {
+  opacity: 0.9;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
 @media (min-width: 768px) {
   .staff-orders {
     max-width: 900px;
