@@ -3,12 +3,14 @@
     subtitle: 'Панель персонала',
     error: 'Неверный пароль',
     passwordPh: 'Пароль',
-    login: 'Войти'
+    login: 'Войти',
+    downloadApp: 'Скачать приложение для Android'
   } : {
     subtitle: 'Panoul personalului',
     error: 'Parolă incorectă',
     passwordPh: 'Parola',
-    login: 'Autentificare'
+    login: 'Autentificare',
+    downloadApp: 'Descarcă aplicația pentru Android'
   };
 %>
 <!DOCTYPE html>
@@ -26,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/staff.css?v=3">
+  <link rel="stylesheet" href="/css/staff.css?v=9">
 </head>
 <body class="staff-login-body">
   <div class="staff-login">
@@ -48,6 +50,11 @@
           placeholder="<%= L.passwordPh %>" autocomplete="current-password" autofocus>
         <button type="submit" class="staff-btn"><%= L.login %></button>
       </form>
+
+      <a href="/Renome-Staff.apk" download class="staff-download-app">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <%= L.downloadApp %>
+      </a>
     </div>
   </div>
 </body>
