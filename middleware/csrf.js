@@ -12,8 +12,12 @@ function csrfProtection(req, res, next) {
 
     const token = req.body._csrf || req.query._csrf;
     if (!token || token !== req.session._csrf) {
-      const msg = (req.t && req.t.errors) ? req.t.errors.csrf : 'Security error (CSRF). Reload the page.';
-      return res.status(403).send(msg);
+      // Auto-redirect back instead of showing error
+      const backUrl = req.get('Referer') || req.originalUrl || '/';
+      return res.status(403).send(
+        '<html><head><meta http-equiv="refresh" content="0;url=' + backUrl + '"></head>' +
+        '<body><p>Обновление... / Reloading...</p></body></html>'
+      );
     }
   }
   next();
