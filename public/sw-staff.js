@@ -1,4 +1,4 @@
-var CACHE_NAME = 'renome-staff-v1';
+var CACHE_NAME = 'renome-staff-v2';
 var APP_SHELL = [
   '/css/staff.css',
   '/js/staff.js',
@@ -68,6 +68,38 @@ self.addEventListener('fetch', function(event) {
         }
         return response;
       });
+    })
+  );
+});
+
+// Push notification from server (Web Push API)
+self.addEventListener('push', function(event) {
+  var data = {};
+  try { data = event.data ? event.data.json() : {}; } catch (e) { /* ignore */ }
+
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'Renome Staff', {
+      body: data.body || '',
+      icon: '/img/logo.png',
+      badge: '/img/logo.png',
+      tag: 'order-' + (data.data && data.data.orderId || Date.now()),
+      requireInteraction: true,
+      data: data.data || {}
+    })
+  );
+});
+
+// Click on push notification — open/focus the staff page
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
+      for (var i = 0; i < clientList.length; i++) {
+        if (clientList[i].url.indexOf('/staff') !== -1 && 'focus' in clientList[i]) {
+          return clientList[i].focus();
+        }
+      }
+      return clients.openWindow('/staff');
     })
   );
 });

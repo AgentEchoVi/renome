@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../database/init');
 const orderEmitter = require('../lib/orderEvents');
 const { sendPushToStaff } = require('../lib/firebase');
+const { sendWebPushToStaff } = require('../lib/webpush');
 
 // Helper: get localized field from DB row
 function L(item, field, lang) {
@@ -135,13 +136,13 @@ router.post('/checkout', (req, res) => {
     // Send localized FCM push to staff phones
     const itemsList = resolvedItems.map(i => i.quantity + 'x ' + i.name).join(', ');
     const pushBody = fullOrder.customer_name + ' · ' + fullOrder.total + ' MDL\n' + itemsList;
-    sendPushToStaff(
-      {
-        ro: { title: 'Comandă nouă #' + orderId, body: pushBody },
-        ru: { title: 'Новый заказ #' + orderId, body: pushBody }
-      },
-      { orderId: String(orderId) }
-    );
+    const pushMessages = {
+      ro: { title: 'Comandă nouă #' + orderId, body: pushBody },
+      ru: { title: 'Новый заказ #' + orderId, body: pushBody }
+    };
+    const pushData = { orderId: String(orderId) };
+    sendPushToStaff(pushMessages, pushData);
+    sendWebPushToStaff(pushMessages, pushData);
   }
 
   res.json({ success: true, orderId });

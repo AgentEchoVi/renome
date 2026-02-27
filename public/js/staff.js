@@ -532,16 +532,68 @@
     } catch (e) { /* notification failed */ }
   }
 
+  // === Web Push subscription (desktop/Electron) ===
+  function urlBase64ToUint8Array(base64String) {
+    var padding = '='.repeat((4 - base64String.length % 4) % 4);
+    var base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    var raw = atob(base64);
+    var arr = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+    return arr;
+  }
+
+  function subscribeWebPush() {
+    var vapidKey = window.VAPID_PUBLIC_KEY;
+    if (!vapidKey || !('serviceWorker' in navigator) || !('PushManager' in window)) return;
+
+    navigator.serviceWorker.ready.then(function(reg) {
+      reg.pushManager.getSubscription().then(function(existing) {
+        if (existing) {
+          // Already subscribed, send to server in case lang changed
+          sendWebPushSub(existing);
+          return;
+        }
+        reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(vapidKey)
+        }).then(function(sub) {
+          sendWebPushSub(sub);
+        }).catch(function(err) {
+          console.log('Web Push subscribe failed:', err);
+        });
+      });
+    });
+  }
+
+  function sendWebPushSub(sub) {
+    var subJson = sub.toJSON();
+    fetch('/staff/register-web-push', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCsrf() },
+      body: JSON.stringify({
+        endpoint: subJson.endpoint,
+        p256dh: subJson.keys.p256dh,
+        auth: subJson.keys.auth,
+        lang: lang
+      })
+    }).catch(function() {});
+  }
+
   // === Notification Permission Banner ===
   if (!isCapacitor && 'Notification' in window && Notification.permission === 'default') {
     if (notifyBanner) notifyBanner.style.display = 'flex';
   }
 
+  if (!isCapacitor && 'Notification' in window && Notification.permission === 'granted') {
+    subscribeWebPush();
+  }
+
   if (enableBtn) {
     enableBtn.addEventListener('click', function() {
       if ('Notification' in window) {
-        Notification.requestPermission().then(function() {
+        Notification.requestPermission().then(function(perm) {
           if (notifyBanner) notifyBanner.style.display = 'none';
+          if (perm === 'granted') subscribeWebPush();
         });
       }
     });

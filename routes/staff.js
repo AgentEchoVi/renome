@@ -65,7 +65,7 @@ router.get('/', isStaff, (req, res) => {
     order.history = stmtHistory.all(order.id);
   });
 
-  res.render('staff/dashboard', { orders });
+  res.render('staff/dashboard', { orders, vapidPublicKey: process.env.VAPID_PUBLIC_KEY || '' });
 });
 
 // POST /staff/orders/:id/status — change order status
@@ -265,6 +265,19 @@ router.post('/unregister-push', isStaff, (req, res) => {
   if (token) {
     db.prepare('DELETE FROM push_tokens WHERE token = ?').run(token);
   }
+  res.json({ success: true });
+});
+
+// POST /staff/register-web-push — save Web Push subscription
+router.post('/register-web-push', isStaff, (req, res) => {
+  const { endpoint, p256dh, auth, lang } = req.body;
+  if (!endpoint || !p256dh || !auth) return res.status(400).json({ error: 'Invalid subscription' });
+  const userLang = (lang === 'ru') ? 'ru' : 'ro';
+
+  db.prepare(`INSERT OR REPLACE INTO web_push_subs (endpoint, p256dh, auth, lang) VALUES (?, ?, ?, ?)`)
+    .run(endpoint, p256dh, auth, userLang);
+
+  console.log('Web Push registered (lang=' + userLang + '):', endpoint.substring(0, 40) + '...');
   res.json({ success: true });
 });
 

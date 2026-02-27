@@ -324,7 +324,8 @@
   <script>
     window.STAFF_LANG = '<%= lang %>';
     window.STAFF_T = <%- JSON.stringify(L) %>;
+    window.VAPID_PUBLIC_KEY = '<%= typeof vapidPublicKey !== "undefined" ? vapidPublicKey : "" %>';
   </script>
-  <script src="/js/staff.js?v=7"></script>
+  <script src="/js/staff.js?v=8"></script>
 </body>
 </html>
