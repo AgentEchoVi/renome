@@ -105,8 +105,17 @@
     .qr__step-icon {
       display: block;
       margin: 0 auto 4px;
-      font-size: 18px;
       line-height: 1;
+    }
+
+    .qr__step-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: #2d5a27;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .qr__step-ro { display: block; }
@@ -221,7 +230,8 @@
       .qr__code img { width: 28mm; height: 28mm; }
       .qr__steps { gap: 3px; margin-bottom: 5px; }
       .qr__step { padding: 4px 2px; border-radius: 5px; font-size: 7px; }
-      .qr__step-icon { font-size: 12px; margin-bottom: 2px; }
+      .qr__step-icon svg { width: 14px; height: 14px; }
+      .qr__step-icon { margin-bottom: 2px; }
       .qr__step-ru { font-size: 6px; }
       .qr__url { font-size: 7px; padding: 2px 8px; margin-bottom: 4px; }
       .qr__sep { margin-bottom: 3px; }
@@ -249,17 +259,17 @@
 
     <div class="qr__steps">
       <div class="qr__step">
-        <span class="qr__step-icon">&#128247;</span>
+        <span class="qr__step-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01" stroke-width="2.5"/><path d="M9 7h2v2H9zM13 7h2v2h-2zM9 11h2v2H9zM13 11h2v2h-2z" stroke-width="1.2"/></svg></span>
         <span class="qr__step-ro">Scaneaz&#259;</span>
         <span class="qr__step-ru">Сканируй</span>
       </div>
       <div class="qr__step">
-        <span class="qr__step-icon">&#128196;</span>
+        <span class="qr__step-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/><circle cx="8" cy="6" r="1" fill="#2d5a27" stroke="none"/><circle cx="8" cy="12" r="1" fill="#2d5a27" stroke="none"/><circle cx="8" cy="18" r="1" fill="#2d5a27" stroke="none"/></svg></span>
         <span class="qr__step-ro">Alege</span>
         <span class="qr__step-ru">Выбери</span>
       </div>
       <div class="qr__step">
-        <span class="qr__step-icon">&#9989;</span>
+        <span class="qr__step-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
         <span class="qr__step-ro">Comand&#259;</span>
         <span class="qr__step-ru">Закажи</span>
       </div>
